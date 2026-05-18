@@ -12,7 +12,7 @@
   <!-- Dynamic Navigation Sections -->
   <ul class="nav flex-column sidebar-nav gap-2">
     <% if (user.role === 'admin') { %>
-      <% if (user.admin_level === 'super_admin' || user.admin_level === 'payment_verifier') { %>
+      <% if (user.admin_level === 'system_administrator' || user.admin_level === 'payment_verifier') { %>
       <li class="nav-item">
         <a class="nav-link active rounded-3 py-2 px-3 fw-semibold d-flex align-items-center gap-3 text-secondary" id="v-stats-tab" href="#" onclick="switchTab('stats')">
           <i class="fa-solid fa-chart-pie fs-5 text-primary"></i> Dashboard Stats
@@ -20,7 +20,7 @@
       </li>
       <% } %>
       
-      <% if (user.admin_level === 'super_admin' || user.admin_level === 'customer_manager') { %>
+      <% if (user.admin_level === 'system_administrator' || user.admin_level === 'customer_manager') { %>
       <li class="nav-item">
         <a class="nav-link rounded-3 py-2 px-3 fw-semibold d-flex align-items-center gap-3 text-secondary" id="v-agents-tab" href="#" onclick="switchTab('agents')">
           <i class="fa-solid fa-user-gear fs-5 text-primary"></i> Travel Agents
@@ -33,7 +33,7 @@
       </li>
       <% } %>
 
-      <% if (user.admin_level === 'super_admin' || user.admin_level === 'package_manager') { %>
+      <% if (user.admin_level === 'system_administrator' || user.admin_level === 'package_manager') { %>
       <li class="nav-item">
         <a class="nav-link rounded-3 py-2 px-3 fw-semibold d-flex align-items-center gap-3 text-secondary" id="v-packages-tab" href="#" onclick="switchTab('packages')">
           <i class="fa-solid fa-map-location-dot fs-5 text-primary"></i> Tour Packages
@@ -41,7 +41,7 @@
       </li>
       <% } %>
 
-      <% if (user.admin_level === 'super_admin' || user.admin_level === 'customer_manager' || user.admin_level === 'package_manager' || user.admin_level === 'payment_verifier') { %>
+      <% if (user.admin_level === 'system_administrator' || user.admin_level === 'customer_manager' || user.admin_level === 'package_manager' || user.admin_level === 'payment_verifier') { %>
       <li class="nav-item">
         <a class="nav-link rounded-3 py-2 px-3 fw-semibold d-flex align-items-center gap-3 text-secondary" id="v-bookings-tab" href="#" onclick="switchTab('bookings')">
           <i class="fa-solid fa-bookmark fs-5 text-primary"></i> Master Bookings
@@ -49,7 +49,7 @@
       </li>
       <% } %>
 
-      <% if (user.admin_level === 'super_admin' || user.admin_level === 'payment_verifier') { %>
+      <% if (user.admin_level === 'system_administrator' || user.admin_level === 'payment_verifier') { %>
       <li class="nav-item">
         <a class="nav-link rounded-3 py-2 px-3 fw-semibold d-flex align-items-center gap-3 text-secondary" id="v-payments-tab" href="#" onclick="switchTab('payments')">
           <i class="fa-solid fa-file-invoice-dollar fs-5 text-primary"></i> Payment Records
@@ -57,7 +57,7 @@
       </li>
       <% } %>
 
-      <% if (user.admin_level === 'super_admin' || user.admin_level === 'package_manager') { %>
+      <% if (user.admin_level === 'system_administrator' || user.admin_level === 'package_manager') { %>
       <li class="nav-item">
         <a class="nav-link rounded-3 py-2 px-3 fw-semibold d-flex align-items-center gap-3 text-secondary" id="v-discounts-tab" href="#" onclick="switchTab('discounts')">
           <i class="fa-solid fa-tags fs-5 text-primary"></i> Discounts
@@ -65,7 +65,7 @@
       </li>
       <% } %>
 
-      <% if (user.admin_level === 'super_admin') { %>
+      <% if (user.admin_level === 'system_administrator') { %>
       <li class="nav-item">
         <a class="nav-link rounded-3 py-2 px-3 fw-semibold d-flex align-items-center gap-3 text-secondary" id="v-admins-tab" href="#" onclick="switchTab('admins')">
           <i class="fa-solid fa-users-gear fs-5 text-primary"></i> System Admins
