@@ -39,6 +39,7 @@ window.switchTab = (tabName) => {
   if (tabName === 'packages') loadPackages();
   if (tabName === 'bookings') loadBookings();
   if (tabName === 'payments') loadPayments();
+  if (tabName === 'discounts') loadDiscounts();
   if (tabName === 'profile') loadAdminProfile();
 };
 
@@ -410,6 +411,37 @@ window.loadPayments = async () => {
     }
   } catch (error) {
     console.error('AJAX Load Payments Error:', error);
+  }
+};
+
+// --- DISCOUNTS LOAD ---
+window.loadDiscounts = async () => {
+  try {
+    const tableBody = document.getElementById('discountsTableBody');
+    tableBody.innerHTML = `<tr><td colspan="5" class="text-center py-4 text-muted"><div class="spinner-border spinner-border-sm text-primary"></div> Loading discounts...</td></tr>`;
+
+    const response = await fetch('/api/admin/discounts');
+    const result = await response.json();
+
+    if (result.success && result.data.length > 0) {
+      tableBody.innerHTML = '';
+      result.data.forEach(d => {
+        const badgeClass = d.status === 'active' ? 'badge-report' : 'badge-report badge-report-inactive';
+        tableBody.insertAdjacentHTML('beforeend', `
+          <tr class="animate__animated animate__fadeInUp animate__faster">
+            <td><code class="fs-6 text-dark">${d.promo_code}</code></td>
+            <td><span class="fw-bold text-success">${d.discount_percent}%</span></td>
+            <td><span class="text-secondary">${d.max_discount ? formatCurrency(d.max_discount) : 'No Limit'}</span></td>
+            <td><span class="text-muted fs-7">${formatDate(d.expiry_date)}</span></td>
+            <td><span class="${badgeClass} text-capitalize">${d.status}</span></td>
+          </tr>
+        `);
+      });
+    } else {
+      tableBody.innerHTML = `<tr><td colspan="5" class="text-center py-4 text-muted">No promo codes registered.</td></tr>`;
+    }
+  } catch (error) {
+    console.error('AJAX Load Discounts Error:', error);
   }
 };
 

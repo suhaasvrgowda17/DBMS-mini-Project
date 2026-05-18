@@ -4,6 +4,7 @@ const Agent = require('../models/Agent');
 const Customer = require('../models/Customer');
 const Booking = require('../models/Booking');
 const Payment = require('../models/Payment');
+const Discount = require('../models/Discount');
 
 // Get high-level Dashboard Stats
 exports.getDashboardStats = async (req, res) => {
@@ -253,5 +254,16 @@ exports.getPayments = async (req, res) => {
   } catch (error) {
     console.error('Admin Get Payments Error:', error);
     res.status(500).json({ success: false, message: 'Failed to retrieve payments audit logs.' });
+  }
+};
+
+// --- DISCOUNTS MANAGEMENT ---
+exports.getDiscounts = async (req, res) => {
+  try {
+    const discounts = await Discount.getAll();
+    res.json({ success: true, data: discounts });
+  } catch (error) {
+    console.error('Admin Get Discounts Error:', error);
+    res.status(500).json({ success: false, message: 'Failed to retrieve discount records.' });
   }
 };

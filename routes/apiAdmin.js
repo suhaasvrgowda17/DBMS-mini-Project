@@ -28,4 +28,7 @@ router.delete('/bookings/:id', adminController.deleteBookingByAdmin);
 // Payments Ledger Audit Logs
 router.get('/payments', adminController.getPayments);
 
+// Discounts / Promo Codes
+router.get('/discounts', adminController.getDiscounts);
+
 module.exports = router;

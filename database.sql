@@ -16,6 +16,7 @@ DROP TABLE IF EXISTS `agents`;
 DROP TABLE IF EXISTS `admins`;
 DROP TABLE IF EXISTS `tour_packages`;
 DROP TABLE IF EXISTS `promo_codes`;
+DROP TABLE IF EXISTS `discounts`;
 
 -- 1. Standalone Admins Table
 CREATE TABLE IF NOT EXISTS `admins` (
@@ -77,10 +78,9 @@ CREATE TABLE IF NOT EXISTS `tour_packages` (
   CONSTRAINT chk_package_slots CHECK (`available_slots` >= 0)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- 4.5 Promo Codes Table
-CREATE TABLE IF NOT EXISTS `promo_codes` (
-  `id` INT AUTO_INCREMENT PRIMARY KEY,
-  `code` VARCHAR(50) NOT NULL UNIQUE,
+-- 4.5 Discounts Table
+CREATE TABLE IF NOT EXISTS `discounts` (
+  `promo_code` VARCHAR(50) PRIMARY KEY,
   `discount_percent` DECIMAL(5,2) NOT NULL,
   `max_discount` DECIMAL(10,2) DEFAULT NULL,
   `expiry_date` DATE NOT NULL,
@@ -102,13 +102,13 @@ CREATE TABLE IF NOT EXISTS `bookings` (
   `total_price` DECIMAL(10,2) NOT NULL,
   `status` ENUM('pending', 'confirmed', 'cancelled') DEFAULT 'pending',
   `cancellation_reason` TEXT DEFAULT NULL,
-  `promo_code_id` INT DEFAULT NULL,
+  `applied_promo_code` VARCHAR(50) DEFAULT NULL,
   `booking_date` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`) ON DELETE CASCADE,
   FOREIGN KEY (`package_id`) REFERENCES `tour_packages` (`id`) ON DELETE CASCADE,
   FOREIGN KEY (`agent_id`) REFERENCES `agents` (`id`) ON DELETE SET NULL,
-  FOREIGN KEY (`promo_code_id`) REFERENCES `promo_codes` (`id`) ON DELETE SET NULL,
+  FOREIGN KEY (`applied_promo_code`) REFERENCES `discounts` (`promo_code`) ON DELETE SET NULL,
   CONSTRAINT chk_travelers CHECK (`number_of_travelers` > 0)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -135,7 +135,7 @@ CREATE INDEX idx_customer_booking ON bookings(customer_id);
 CREATE INDEX idx_agent_booking ON bookings(agent_id);
 CREATE INDEX idx_package_booking ON bookings(package_id);
 CREATE INDEX idx_payment_customer ON payments(customer_id);
-CREATE INDEX idx_promo_booking ON bookings(promo_code_id);
+CREATE INDEX idx_promo_booking ON bookings(applied_promo_code);
 
 -- =====================================================================
 -- AUTOMATED BUSINESS LOGIC TRIGGERS
@@ -147,10 +147,10 @@ DROP TRIGGER IF EXISTS `before_booking_insert_apply_promo`;
 CREATE TRIGGER `before_booking_insert_nullify_promo`
 BEFORE INSERT ON `bookings`
 FOR EACH ROW
-  SET NEW.promo_code_id = (
-    SELECT pc.id 
-    FROM `promo_codes` pc
-    WHERE pc.id = NEW.promo_code_id AND pc.status = 'active' AND pc.expiry_date >= CURDATE()
+  SET NEW.applied_promo_code = (
+    SELECT pc.promo_code 
+    FROM `discounts` pc
+    WHERE pc.promo_code = NEW.applied_promo_code AND pc.status = 'active' AND pc.expiry_date >= CURDATE()
   );
 
 -- 2. Trigger to calculate total_price dynamically and apply active promo code discount
@@ -160,7 +160,7 @@ FOR EACH ROW
   SET NEW.total_price = (
     SELECT 
       CASE 
-        WHEN NEW.promo_code_id IS NOT NULL THEN
+        WHEN NEW.applied_promo_code IS NOT NULL THEN
           ((tp.price * NEW.number_of_travelers) - 
            COALESCE(
              (tp.price * NEW.number_of_travelers * pc.discount_percent) / 100, 
@@ -170,7 +170,7 @@ FOR EACH ROW
           tp.price * NEW.number_of_travelers
       END
     FROM `tour_packages` tp
-    LEFT JOIN `promo_codes` pc ON pc.id = NEW.promo_code_id
+    LEFT JOIN `discounts` pc ON pc.promo_code = NEW.applied_promo_code
     WHERE tp.id = NEW.package_id
   );
 
@@ -199,12 +199,12 @@ INSERT INTO `customers` (`id`, `username`, `email`, `password`, `name`, `phone`,
 (7, 'sinchana321', 'sinchana@gmail.com', '$2a$10$bGzsWGvFFhS.efLkLpL8Ou7HB004w5/8X8ihP2yZV4aaQEo.OUYxq', 'sinchana', '9998887773', '321 Ring Road, Hubli', 'S99887763', 4),
 (8, 'sahana321', 'sahana@gmail.com', '$2a$10$bGzsWGvFFhS.efLkLpL8Ou7HB004w5/8X8ihP2yZV4aaQEo.OUYxq', 'sahana', '9998887772', '654 Central Ave, Mangalore', 'S99887762', 1);
 
--- 3.5 Insert Seed Promo Codes
-INSERT INTO `promo_codes` (`id`, `code`, `discount_percent`, `max_discount`, `expiry_date`, `status`) VALUES
-(1, 'WELCOME10', 10.00, 5000.00, '2027-12-31', 'active'),
-(2, 'SUMMER20', 20.00, 10000.00, '2027-08-31', 'active'),
-(3, 'EXPIRED50', 50.00, 20000.00, '2025-01-01', 'active'),
-(4, 'DISABLED15', 15.00, 3000.00, '2027-12-31', 'inactive');
+-- 3.5 Insert Seed Discounts
+INSERT INTO `discounts` (`promo_code`, `discount_percent`, `max_discount`, `expiry_date`, `status`) VALUES
+('WELCOME10', 10.00, 5000.00, '2027-12-31', 'active'),
+('SUMMER20', 20.00, 10000.00, '2027-08-31', 'active'),
+('EXPIRED50', 50.00, 20000.00, '2025-01-01', 'active'),
+('DISABLED15', 15.00, 3000.00, '2027-12-31', 'inactive');
 
 -- 4. Insert Premium Tour Packages
 INSERT INTO `tour_packages` (`id`, `name`, `destination`, `price`, `duration`, `description`, `category`, `available_slots`, `image_url`) VALUES

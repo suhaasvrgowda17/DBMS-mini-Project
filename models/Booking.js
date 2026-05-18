@@ -28,13 +28,13 @@ class Booking {
              b.agent_id, a.name AS agent_name, a.phone AS agent_phone,
              b.travel_date, b.number_of_travelers, b.total_price, b.status, b.booking_date, b.booking_reference,
              pm.status AS payment_status, pm.transaction_id, pm.payment_method, pm.amount AS payment_amount,
-             pc.code AS promo_code, pc.discount_percent AS promo_discount
+             pc.promo_code AS promo_code, pc.discount_percent AS promo_discount
       FROM bookings b
       JOIN customers c ON b.customer_id = c.id
       JOIN tour_packages p ON b.package_id = p.id
       LEFT JOIN agents a ON b.agent_id = a.id
       LEFT JOIN payments pm ON pm.booking_id = b.id
-      LEFT JOIN promo_codes pc ON b.promo_code_id = pc.id
+      LEFT JOIN discounts pc ON b.applied_promo_code = pc.promo_code
       WHERE b.id = ?
     `;
     const [rows] = await db.execute(sql, [id]);
@@ -47,12 +47,12 @@ class Booking {
       SELECT b.id, b.customer_id, b.package_id, p.name AS package_name, p.destination AS package_destination,
              b.agent_id, a.name AS agent_name, b.travel_date, b.number_of_travelers, 
              b.total_price, b.status, b.booking_date, b.booking_reference, pm.status AS payment_status, pm.transaction_id,
-             pc.code AS promo_code, pc.discount_percent AS promo_discount
+             pc.promo_code AS promo_code, pc.discount_percent AS promo_discount
       FROM bookings b
       JOIN tour_packages p ON b.package_id = p.id
       LEFT JOIN agents a ON b.agent_id = a.id
       LEFT JOIN payments pm ON pm.booking_id = b.id
-      LEFT JOIN promo_codes pc ON b.promo_code_id = pc.id
+      LEFT JOIN discounts pc ON b.applied_promo_code = pc.promo_code
       WHERE b.customer_id = ?
       ORDER BY b.booking_date DESC
     `;
@@ -78,10 +78,10 @@ class Booking {
   }
 
   // Create a new booking (supports external transaction connection)
-  static async create(customerId, packageId, agentId, travelDate, numberOfTravelers, totalPrice, promoCodeId = null, connection = null) {
+  static async create(customerId, packageId, agentId, travelDate, numberOfTravelers, totalPrice, appliedPromoCode = null, connection = null) {
     const bookingReference = `TM-${Date.now().toString().slice(-4)}${Math.floor(1000 + Math.random() * 9000)}`;
     const sql = `
-      INSERT INTO bookings (customer_id, package_id, agent_id, travel_date, number_of_travelers, total_price, booking_reference, promo_code_id, status)
+      INSERT INTO bookings (customer_id, package_id, agent_id, travel_date, number_of_travelers, total_price, booking_reference, applied_promo_code, status)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'pending')
     `;
     const params = [
@@ -92,7 +92,7 @@ class Booking {
       parseInt(numberOfTravelers),
       parseFloat(totalPrice),
       bookingReference,
-      promoCodeId ? parseInt(promoCodeId) : null
+      appliedPromoCode ? appliedPromoCode.toUpperCase().trim() : null
     ];
 
     const execDb = connection || db;

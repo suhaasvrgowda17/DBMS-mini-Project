@@ -282,7 +282,37 @@
         </div>
       </div>
 
-      <!-- 7. MY PROFILE MANAGEMENT TAB PANEL -->
+      <!-- 7. DISCOUNTS TAB PANEL -->
+      <div id="discounts-panel" class="dashboard-tab-panel d-none animate__animated animate__fadeIn">
+        <div class="d-flex align-items-center justify-content-between mb-4">
+          <div>
+            <h3 class="fw-bold text-dark font-outfit mb-1">Discounts & Promo Codes</h3>
+            <p class="text-muted fs-7 mb-0">View all active and inactive discount coupons.</p>
+          </div>
+        </div>
+
+        <div class="table-report-wrapper">
+          <div class="table-report-title">ACTIVE DISCOUNTS DIRECTORY</div>
+          <div class="table-responsive" style="border: none; border-radius: 0;">
+            <table class="table-report align-middle">
+              <thead>
+                <tr>
+                  <th>Promo Code</th>
+                  <th>Discount %</th>
+                  <th>Max Discount</th>
+                  <th>Expiry Date</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="discountsTableBody">
+                <!-- Loaded via AJAX -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- 8. MY PROFILE MANAGEMENT TAB PANEL -->
       <div id="profile-panel" class="dashboard-tab-panel d-none animate__animated animate__fadeIn">
         <div class="mb-4">
           <h3 class="fw-bold text-dark font-outfit mb-1">Administrator Profile Settings</h3>

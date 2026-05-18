@@ -3,7 +3,7 @@ const Package = require('../models/Package');
 const Booking = require('../models/Booking');
 const Payment = require('../models/Payment');
 const Customer = require('../models/Customer');
-const PromoCode = require('../models/PromoCode');
+const Discount = require('../models/Discount');
 
 // Get all tour packages (Customer browsing)
 exports.getAvailablePackages = async (req, res) => {
@@ -30,7 +30,7 @@ exports.validatePromoCode = async (req, res) => {
       return res.status(400).json({ success: false, message: 'Promo code is required.' });
     }
 
-    const promo = await PromoCode.getByCode(code);
+    const promo = await Discount.getByCode(code);
     if (!promo) {
       return res.json({ success: false, message: 'Invalid promo code.' });
     }
@@ -46,8 +46,7 @@ exports.validatePromoCode = async (req, res) => {
       success: true,
       message: `Promo code applied! You get a ${parseFloat(promo.discount_percent)}% discount.`,
       data: {
-        id: promo.id,
-        code: promo.code,
+        code: promo.promo_code,
         discount_percent: parseFloat(promo.discount_percent)
       }
     });
@@ -87,17 +86,17 @@ exports.bookPackage = async (req, res) => {
     }
 
     let totalPrice = pack.price * parseInt(number_of_travelers);
-    let promoCodeId = null;
+    let appliedPromoCode = null;
     let promoDiscount = 0;
 
     // Check and validate promo code if provided
     if (promo_code) {
-      const promo = await PromoCode.getByCode(promo_code);
+      const promo = await Discount.getByCode(promo_code);
       if (promo) {
         const today = new Date().toISOString().split('T')[0];
         const expiry = new Date(promo.expiry_date).toISOString().split('T')[0];
         if (promo.status === 'active' && expiry >= today) {
-          promoCodeId = promo.id;
+          appliedPromoCode = promo.promo_code;
           promoDiscount = parseFloat(promo.discount_percent);
           totalPrice = totalPrice - (totalPrice * promoDiscount) / 100;
         }
@@ -118,7 +117,7 @@ exports.bookPackage = async (req, res) => {
       travel_date,
       number_of_travelers,
       totalPrice,
-      promoCodeId,
+      appliedPromoCode,
       connection
     );
 
