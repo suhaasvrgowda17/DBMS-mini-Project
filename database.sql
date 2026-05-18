@@ -139,11 +139,11 @@ INSERT INTO `agents` (`id`, `username`, `email`, `password`, `name`, `phone`, `a
 
 -- 3. Insert Seed Customers (assigned_agent_id references agents.id)
 INSERT INTO `customers` (`id`, `username`, `email`, `password`, `name`, `phone`, `address`, `passport_number`, `assigned_agent_id`) VALUES
-(4, 'suhaas321', 'suhaas@gmail.com', '$2a$10$Itdhaaup/2xBtIGWeELEBOtynK.EFZ7jk5K2JPS3Imv7QwXPh6enu', 'suhaas', '9998887776', '123 Tech Park, Bangalore', 'S99887766', 3),
-(5, 'vani321', 'vani@gmail.com', '$2a$10$2Ng/c7N12Lu7bo927Bv6FOP5P8EadALNelv.mAdS2tlXdIjNKN3cO', 'vani', '9998887775', '456 MG Road, Bangalore', 'V99887765', 3),
-(6, 'rudravinayak321', 'rudravinayak@gmail.com', '$2a$10$yQiFQSYHW63QuSN4Tf9m1.M36VGSvMqUebM3fXxgKBJHMkFhiHleq', 'rudravinayak', '9998887774', '789 Palace Grounds, Mysore', 'R99887764', 4),
-(7, 'sinchana321', 'sinchana@gmail.com', '$2a$10$ajyRUBlTIsLgYDXMvEiY8uWDoXpjiM7u4jCbXCTdUzvOKi/0S97J.', 'sinchana', '9998887773', '321 Ring Road, Hubli', 'S99887763', 4),
-(8, 'sahana321', 'sahana@gmail.com', '$2a$10$soSJVwv7MCprk.1jlG1sBOnBxWIf7B1dEYkSJXaydYKJ/qsC4vR3S', 'sahana', '9998887772', '654 Central Ave, Mangalore', 'S99887762', 1);
+(4, 'suhaas321', 'suhaas@gmail.com', '$2a$10$bGzsWGvFFhS.efLkLpL8Ou7HB004w5/8X8ihP2yZV4aaQEo.OUYxq', 'suhaas', '9998887776', '123 Tech Park, Bangalore', 'S99887766', 3),
+(5, 'vani321', 'vani@gmail.com', '$2a$10$bGzsWGvFFhS.efLkLpL8Ou7HB004w5/8X8ihP2yZV4aaQEo.OUYxq', 'vani', '9998887775', '456 MG Road, Bangalore', 'V99887765', 3),
+(6, 'rudravinayak321', 'rudravinayak@gmail.com', '$2a$10$bGzsWGvFFhS.efLkLpL8Ou7HB004w5/8X8ihP2yZV4aaQEo.OUYxq', 'rudravinayak', '9998887774', '789 Palace Grounds, Mysore', 'R99887764', 4),
+(7, 'sinchana321', 'sinchana@gmail.com', '$2a$10$bGzsWGvFFhS.efLkLpL8Ou7HB004w5/8X8ihP2yZV4aaQEo.OUYxq', 'sinchana', '9998887773', '321 Ring Road, Hubli', 'S99887763', 4),
+(8, 'sahana321', 'sahana@gmail.com', '$2a$10$bGzsWGvFFhS.efLkLpL8Ou7HB004w5/8X8ihP2yZV4aaQEo.OUYxq', 'sahana', '9998887772', '654 Central Ave, Mangalore', 'S99887762', 1);
 
 -- 4. Insert Premium Tour Packages
 INSERT INTO `tour_packages` (`id`, `name`, `destination`, `price`, `duration`, `description`, `category`, `available_slots`, `image_url`) VALUES
