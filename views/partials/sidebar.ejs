@@ -12,11 +12,15 @@
   <!-- Dynamic Navigation Sections -->
   <ul class="nav flex-column sidebar-nav gap-2">
     <% if (user.role === 'admin') { %>
+      <% if (user.admin_level === 'super_admin') { %>
       <li class="nav-item">
         <a class="nav-link active rounded-3 py-2 px-3 fw-semibold d-flex align-items-center gap-3 text-secondary" id="v-stats-tab" href="#" onclick="switchTab('stats')">
           <i class="fa-solid fa-chart-pie fs-5 text-primary"></i> Dashboard Stats
         </a>
       </li>
+      <% } %>
+      
+      <% if (user.admin_level === 'super_admin' || user.admin_level === 'customer_manager') { %>
       <li class="nav-item">
         <a class="nav-link rounded-3 py-2 px-3 fw-semibold d-flex align-items-center gap-3 text-secondary" id="v-agents-tab" href="#" onclick="switchTab('agents')">
           <i class="fa-solid fa-user-gear fs-5 text-primary"></i> Travel Agents
@@ -27,26 +31,39 @@
           <i class="fa-solid fa-users fs-5 text-primary"></i> Customers List
         </a>
       </li>
+      <% } %>
+
+      <% if (user.admin_level === 'super_admin' || user.admin_level === 'package_manager') { %>
       <li class="nav-item">
         <a class="nav-link rounded-3 py-2 px-3 fw-semibold d-flex align-items-center gap-3 text-secondary" id="v-packages-tab" href="#" onclick="switchTab('packages')">
           <i class="fa-solid fa-map-location-dot fs-5 text-primary"></i> Tour Packages
         </a>
       </li>
+      <% } %>
+
+      <% if (user.admin_level === 'super_admin' || user.admin_level === 'customer_manager' || user.admin_level === 'package_manager') { %>
       <li class="nav-item">
         <a class="nav-link rounded-3 py-2 px-3 fw-semibold d-flex align-items-center gap-3 text-secondary" id="v-bookings-tab" href="#" onclick="switchTab('bookings')">
           <i class="fa-solid fa-bookmark fs-5 text-primary"></i> Master Bookings
         </a>
       </li>
+      <% } %>
+
+      <% if (user.admin_level === 'super_admin') { %>
       <li class="nav-item">
         <a class="nav-link rounded-3 py-2 px-3 fw-semibold d-flex align-items-center gap-3 text-secondary" id="v-payments-tab" href="#" onclick="switchTab('payments')">
           <i class="fa-solid fa-file-invoice-dollar fs-5 text-primary"></i> Payment Records
         </a>
       </li>
+      <% } %>
+
+      <% if (user.admin_level === 'super_admin' || user.admin_level === 'package_manager') { %>
       <li class="nav-item">
         <a class="nav-link rounded-3 py-2 px-3 fw-semibold d-flex align-items-center gap-3 text-secondary" id="v-discounts-tab" href="#" onclick="switchTab('discounts')">
           <i class="fa-solid fa-tags fs-5 text-primary"></i> Discounts
         </a>
       </li>
+      <% } %>
     <% } else if (user.role === 'agent') { %>
       <li class="nav-item">
         <a class="nav-link active rounded-3 py-2 px-3 fw-semibold d-flex align-items-center gap-3 text-secondary" id="v-customers-tab" href="#" onclick="switchTab('customers')">

@@ -33,6 +33,7 @@ exports.login = async (req, res) => {
       username: user.username,
       email: user.email,
       role: user.role,
+      admin_level: user.admin_level || null,
       displayName: displayName
     };
 

@@ -5,7 +5,7 @@ class User {
   // Find a user by their username (checks admins, agents, and customers sequentially)
   static async findByUsername(username) {
     // 1. Check admins
-    let [rows] = await db.execute('SELECT *, \'admin\' AS role FROM admins WHERE username = ?', [username]);
+    let [rows] = await db.execute('SELECT *, role AS admin_level, \'admin\' AS role FROM admins WHERE username = ?', [username]);
     if (rows[0]) return rows[0];
 
     // 2. Check agents
@@ -22,7 +22,7 @@ class User {
   // Find a user by their email
   static async findByEmail(email) {
     // 1. Check admins
-    let [rows] = await db.execute('SELECT *, \'admin\' AS role FROM admins WHERE email = ?', [email]);
+    let [rows] = await db.execute('SELECT *, role AS admin_level, \'admin\' AS role FROM admins WHERE email = ?', [email]);
     if (rows[0]) return rows[0];
 
     // 2. Check agents
@@ -52,7 +52,7 @@ class User {
   // Find a user by their ID and role
   static async findById(id, role = null) {
     if (role === 'admin') {
-      const [rows] = await db.execute('SELECT *, \'admin\' AS role FROM admins WHERE id = ?', [id]);
+      const [rows] = await db.execute('SELECT *, role AS admin_level, \'admin\' AS role FROM admins WHERE id = ?', [id]);
       return rows[0] || null;
     }
     if (role === 'agent') {
@@ -65,7 +65,7 @@ class User {
     }
 
     // Fallback if role is not supplied (search all tables)
-    let [rows] = await db.execute('SELECT *, \'admin\' AS role FROM admins WHERE id = ?', [id]);
+    let [rows] = await db.execute('SELECT *, role AS admin_level, \'admin\' AS role FROM admins WHERE id = ?', [id]);
     if (rows[0]) return rows[0];
     [rows] = await db.execute('SELECT *, \'agent\' AS role FROM agents WHERE id = ?', [id]);
     if (rows[0]) return rows[0];
