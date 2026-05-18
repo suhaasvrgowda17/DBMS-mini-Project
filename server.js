@@ -77,9 +77,13 @@ app.use((err, req, res, next) => {
 });
 
 // Start Server
-app.listen(PORT, () => {
-  console.log(`====================================================`);
-  console.log(`✨ TravelMate Travel Management System Active!`);
-  console.log(`🚀 Server listening on http://localhost:${PORT}`);
-  console.log(`====================================================`);
-});
+if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`====================================================`);
+    console.log(`✨ TravelMate Travel Management System Active!`);
+    console.log(`🚀 Server listening on http://localhost:${PORT}`);
+    console.log(`====================================================`);
+  });
+}
+
+module.exports = app;
