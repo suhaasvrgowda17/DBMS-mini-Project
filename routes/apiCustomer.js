@@ -12,5 +12,6 @@ router.get('/bookings', customerController.getBookingHistory);
 router.post('/bookings', customerController.bookPackage);
 router.post('/payment', customerController.processPayment);
 router.put('/bookings/:id/cancel', customerController.cancelBooking);
+router.get('/promo/validate', customerController.validatePromoCode);
 
 module.exports = router;

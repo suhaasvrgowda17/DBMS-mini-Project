@@ -16,6 +16,12 @@ document.addEventListener('DOMContentLoaded', () => {
     travelersInput.addEventListener('input', updateEstimatedTotalCost);
   }
 
+  // Promo code verification event
+  const applyPromoBtn = document.getElementById('applyPromoBtn');
+  if (applyPromoBtn) {
+    applyPromoBtn.addEventListener('click', applyPromoDiscountAction);
+  }
+
   // Live search key event
   const searchInput = document.getElementById('custPackageSearch');
   if (searchInput) {
@@ -111,12 +117,30 @@ window.openConfirmBookingModal = (pack) => {
   document.getElementById('bookModalDuration').innerText = pack.duration;
   document.getElementById('bookModalRate').innerText = formatCurrency(pack.price);
   
-  // Save package rate on modal element dataset for quick live calc
-  document.getElementById('confirmBookingModal').dataset.rate = pack.price;
+  // Reset promo code fields
+  const promoInput = document.getElementById('bookModalPromoCode');
+  if (promoInput) promoInput.value = '';
+  
+  const promoFeedback = document.getElementById('promoFeedback');
+  if (promoFeedback) {
+    promoFeedback.className = 'fs-8 mt-1 d-none';
+    promoFeedback.innerText = '';
+  }
+  
+  const originalPriceLabel = document.getElementById('originalPriceLabel');
+  if (originalPriceLabel) {
+    originalPriceLabel.classList.add('d-none');
+    originalPriceLabel.innerText = '';
+  }
+  
+  const modalElem = document.getElementById('confirmBookingModal');
+  modalElem.dataset.rate = pack.price;
+  modalElem.dataset.discountPercent = '0';
+  
   document.getElementById('bookModalTravelers').value = 1;
   updateEstimatedTotalCost();
 
-  const modal = new bootstrap.Modal(document.getElementById('confirmBookingModal'));
+  const modal = new bootstrap.Modal(modalElem);
   modal.show();
 };
 
@@ -124,8 +148,69 @@ function updateEstimatedTotalCost() {
   const modal = document.getElementById('confirmBookingModal');
   const rate = parseFloat(modal.dataset.rate || 0);
   const count = parseInt(document.getElementById('bookModalTravelers').value || 1);
-  const total = rate * count;
-  document.getElementById('bookModalTotalCost').innerText = formatCurrency(total);
+  const discountPercent = parseFloat(modal.dataset.discountPercent || 0);
+  
+  const originalTotal = rate * count;
+  let finalTotal = originalTotal;
+  
+  if (discountPercent > 0) {
+    finalTotal = originalTotal - (originalTotal * discountPercent) / 100;
+    
+    const originalPriceLabel = document.getElementById('originalPriceLabel');
+    if (originalPriceLabel) {
+      originalPriceLabel.classList.remove('d-none');
+      originalPriceLabel.innerText = formatCurrency(originalTotal);
+    }
+  } else {
+    const originalPriceLabel = document.getElementById('originalPriceLabel');
+    if (originalPriceLabel) {
+      originalPriceLabel.classList.add('d-none');
+    }
+  }
+  
+  document.getElementById('bookModalTotalCost').innerText = formatCurrency(finalTotal);
+}
+
+async function applyPromoDiscountAction() {
+  const promoInput = document.getElementById('bookModalPromoCode');
+  const promoFeedback = document.getElementById('promoFeedback');
+  const modal = document.getElementById('confirmBookingModal');
+  
+  if (!promoInput || !promoFeedback || !modal) return;
+  
+  const code = promoInput.value.trim();
+  if (!code) {
+    promoFeedback.className = 'fs-8 mt-1 text-danger fw-semibold';
+    promoFeedback.innerText = 'Please enter a promo code first.';
+    promoFeedback.classList.remove('d-none');
+    return;
+  }
+  
+  try {
+    const response = await fetch(`/api/customer/promo/validate?code=${encodeURIComponent(code)}`);
+    const result = await response.json();
+    
+    if (result.success && result.data) {
+      promoFeedback.className = 'fs-8 mt-1 text-success fw-semibold';
+      promoFeedback.innerText = result.message;
+      promoFeedback.classList.remove('d-none');
+      
+      modal.dataset.discountPercent = result.data.discount_percent;
+      updateEstimatedTotalCost();
+    } else {
+      promoFeedback.className = 'fs-8 mt-1 text-danger fw-semibold';
+      promoFeedback.innerText = result.message || 'Invalid promo code.';
+      promoFeedback.classList.remove('d-none');
+      
+      modal.dataset.discountPercent = '0';
+      updateEstimatedTotalCost();
+    }
+  } catch (error) {
+    console.error('AJAX Promo Validate Error:', error);
+    promoFeedback.className = 'fs-8 mt-1 text-danger fw-semibold';
+    promoFeedback.innerText = 'Unable to verify coupon code.';
+    promoFeedback.classList.remove('d-none');
+  }
 }
 
 // --- BOOKING HISTORY OPERATIONS ---

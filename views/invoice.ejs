@@ -90,7 +90,8 @@
             </td>
             <td class="text-center fw-semibold text-dark">$<%= parseFloat(booking.package_unit_price).toLocaleString(undefined, { minimumFractionDigits: 2 }) %></td>
             <td class="text-center fw-semibold text-dark"><%= booking.number_of_travelers %></td>
-            <td class="text-end fw-extrabold text-primary">$<%= parseFloat(booking.total_price).toLocaleString(undefined, { minimumFractionDigits: 2 }) %></td>
+            <% const subtotal = parseFloat(booking.package_unit_price) * parseInt(booking.number_of_travelers); %>
+            <td class="text-end fw-extrabold text-primary">$<%= subtotal.toLocaleString(undefined, { minimumFractionDigits: 2 }) %></td>
           </tr>
         </tbody>
       </table>
@@ -101,8 +102,15 @@
       <div class="col-sm-6 col-md-5 col-lg-4">
         <div class="d-flex justify-content-between mb-2">
           <span class="text-muted fs-7">Subtotal:</span>
-          <span class="fw-semibold text-dark">$<%= parseFloat(booking.total_price).toLocaleString(undefined, { minimumFractionDigits: 2 }) %></span>
+          <span class="fw-semibold text-dark">$<%= subtotal.toLocaleString(undefined, { minimumFractionDigits: 2 }) %></span>
         </div>
+        <% if (booking.promo_code) { %>
+          <% const discountAmount = (subtotal * parseFloat(booking.promo_discount)) / 100; %>
+          <div class="d-flex justify-content-between mb-2">
+            <span class="text-muted fs-7 text-danger">Coupon Discount (<%= booking.promo_code %> -<%= parseFloat(booking.promo_discount) %>%):</span>
+            <span class="fw-semibold text-danger">-$<%= discountAmount.toLocaleString(undefined, { minimumFractionDigits: 2 }) %></span>
+          </div>
+        <% } %>
         <div class="d-flex justify-content-between mb-3 pb-2 border-bottom">
           <span class="text-muted fs-7">Sales Tax / GST:</span>
           <span class="fw-semibold text-success">Included (0.00%)</span>

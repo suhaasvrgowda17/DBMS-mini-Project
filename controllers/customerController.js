@@ -3,6 +3,7 @@ const Package = require('../models/Package');
 const Booking = require('../models/Booking');
 const Payment = require('../models/Payment');
 const Customer = require('../models/Customer');
+const PromoCode = require('../models/PromoCode');
 
 // Get all tour packages (Customer browsing)
 exports.getAvailablePackages = async (req, res) => {
@@ -18,6 +19,41 @@ exports.getAvailablePackages = async (req, res) => {
   } catch (error) {
     console.error('Customer Get Packages Error:', error);
     res.status(500).json({ success: false, message: 'Failed to retrieve tour packages.' });
+  }
+};
+
+// Validate a promo code
+exports.validatePromoCode = async (req, res) => {
+  try {
+    const { code } = req.query;
+    if (!code) {
+      return res.status(400).json({ success: false, message: 'Promo code is required.' });
+    }
+
+    const promo = await PromoCode.getByCode(code);
+    if (!promo) {
+      return res.json({ success: false, message: 'Invalid promo code.' });
+    }
+
+    const today = new Date().toISOString().split('T')[0];
+    const expiry = new Date(promo.expiry_date).toISOString().split('T')[0];
+
+    if (promo.status !== 'active' || expiry < today) {
+      return res.json({ success: false, message: 'This promo code has expired or is inactive.' });
+    }
+
+    res.json({
+      success: true,
+      message: `Promo code applied! You get a ${parseFloat(promo.discount_percent)}% discount.`,
+      data: {
+        id: promo.id,
+        code: promo.code,
+        discount_percent: parseFloat(promo.discount_percent)
+      }
+    });
+  } catch (error) {
+    console.error('Validate Promo Code Error:', error);
+    res.status(500).json({ success: false, message: 'Failed to validate promo code.' });
   }
 };
 
@@ -38,7 +74,7 @@ exports.bookPackage = async (req, res) => {
   const connection = await db.getConnection();
   try {
     const customerId = req.session.user.id;
-    const { package_id, travel_date, number_of_travelers } = req.body;
+    const { package_id, travel_date, number_of_travelers, promo_code } = req.body;
 
     if (!package_id || !travel_date || !number_of_travelers) {
       return res.status(400).json({ success: false, message: 'Please provide package details and travel date.' });
@@ -50,7 +86,23 @@ exports.bookPackage = async (req, res) => {
       return res.status(404).json({ success: false, message: 'Selected tour package not found.' });
     }
 
-    const totalPrice = pack.price * parseInt(number_of_travelers);
+    let totalPrice = pack.price * parseInt(number_of_travelers);
+    let promoCodeId = null;
+    let promoDiscount = 0;
+
+    // Check and validate promo code if provided
+    if (promo_code) {
+      const promo = await PromoCode.getByCode(promo_code);
+      if (promo) {
+        const today = new Date().toISOString().split('T')[0];
+        const expiry = new Date(promo.expiry_date).toISOString().split('T')[0];
+        if (promo.status === 'active' && expiry >= today) {
+          promoCodeId = promo.id;
+          promoDiscount = parseFloat(promo.discount_percent);
+          totalPrice = totalPrice - (totalPrice * promoDiscount) / 100;
+        }
+      }
+    }
 
     // Get current customer profile to retrieve their assigned agent
     const customer = await Customer.getById(customerId);
@@ -58,7 +110,7 @@ exports.bookPackage = async (req, res) => {
 
     await connection.beginTransaction();
 
-    // 1. Create booking
+    // 1. Create booking (triggers in DB will enforce total_price)
     const bookingId = await Booking.create(
       customerId,
       package_id,
@@ -66,6 +118,7 @@ exports.bookPackage = async (req, res) => {
       travel_date,
       number_of_travelers,
       totalPrice,
+      promoCodeId,
       connection
     );
 

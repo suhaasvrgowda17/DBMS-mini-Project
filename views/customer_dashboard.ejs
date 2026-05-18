@@ -193,8 +193,20 @@
             </div>
           </div>
 
+          <div class="mb-3">
+            <label class="form-label fw-semibold text-dark fs-8 mb-1">Promo Code / Coupon (Optional)</label>
+            <div class="input-group">
+              <input type="text" name="promo_code" id="bookModalPromoCode" class="form-control rounded-start-pill fs-7 py-2 shadow-none border" placeholder="Enter coupon e.g. WELCOME10">
+              <button class="btn btn-outline-primary rounded-end-pill px-3 fw-semibold fs-8" type="button" id="applyPromoBtn">Apply Code</button>
+            </div>
+            <div id="promoFeedback" class="fs-8 mt-1 d-none fw-semibold"></div>
+          </div>
+
           <div class="d-flex justify-content-between align-items-center mb-3 p-3 bg-light rounded-3 border">
-            <span class="fw-semibold text-dark">Estimated Total:</span>
+            <div>
+              <span class="fw-semibold text-dark d-block">Estimated Total:</span>
+              <span id="originalPriceLabel" class="fs-8 text-decoration-line-through text-muted d-none">$0.00</span>
+            </div>
             <span class="fs-4 fw-extrabold text-primary font-outfit" id="bookModalTotalCost">$0.00</span>
           </div>
 
