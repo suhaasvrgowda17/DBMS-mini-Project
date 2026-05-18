@@ -109,7 +109,7 @@ window.loadAgents = async () => {
     if (result.success && result.data.length > 0) {
       tableBody.innerHTML = '';
       result.data.forEach(agent => {
-        const badgeClass = agent.status === 'active' ? 'badge bg-success-subtle text-success border border-success-subtle' : 'badge bg-danger-subtle text-danger border border-danger-subtle';
+        const badgeClass = agent.status === 'active' ? 'badge-report' : 'badge-report badge-report-inactive';
         tableBody.insertAdjacentHTML('beforeend', `
           <tr class="animate__animated animate__fadeInUp animate__faster">
             <td>
@@ -124,11 +124,11 @@ window.loadAgents = async () => {
             <td><span class="text-muted fs-7">${agent.email}</span></td>
             <td><span class="text-secondary">${agent.phone}</span></td>
             <td><span class="fw-semibold text-primary">${agent.agency_commission}%</span></td>
-            <td><span class="${badgeClass} rounded-pill px-2 py-1 text-capitalize">${agent.status}</span></td>
+            <td><span class="${badgeClass} text-capitalize">${agent.status}</span></td>
             <td class="text-end">
-              <div class="d-flex justify-content-end gap-2">
-                <button class="btn btn-light-primary btn-sm border-0 rounded-circle" onclick="openEditAgentModal(${JSON.stringify(agent).replace(/"/g, '&quot;')})" title="Edit Details"><i class="fa-solid fa-pen"></i></button>
-                <button class="btn btn-light-danger btn-sm border-0 rounded-circle" onclick="deleteAgent(${agent.id})" title="Delete"><i class="fa-solid fa-trash"></i></button>
+              <div class="d-flex justify-content-end">
+                <button class="btn-report-action btn-report-edit" onclick="openEditAgentModal(${JSON.stringify(agent).replace(/"/g, '&quot;')})" title="Edit Details"><i class="fa-solid fa-pen"></i></button>
+                <button class="btn-report-action btn-report-delete" onclick="deleteAgent(${agent.id})" title="Delete"><i class="fa-solid fa-trash"></i></button>
               </div>
             </td>
           </tr>
@@ -200,9 +200,9 @@ window.loadCustomers = async () => {
             <td><span class="fw-semibold text-dark">${c.passport_number || 'N/A'}</span></td>
             <td>${agentName}</td>
             <td class="text-end">
-              <div class="d-flex justify-content-end gap-1">
-                <button class="btn btn-light-primary btn-sm border-0 rounded-circle" onclick="openEditCustomerModal(${JSON.stringify(c).replace(/"/g, '&quot;')})" title="Edit Details"><i class="fa-solid fa-pen"></i></button>
-                <button class="btn btn-light-danger btn-sm border-0 rounded-circle" onclick="deleteCustomer(${c.id})" title="Delete Passenger"><i class="fa-solid fa-trash"></i></button>
+              <div class="d-flex justify-content-end">
+                <button class="btn-report-action btn-report-edit" onclick="openEditCustomerModal(${JSON.stringify(c).replace(/"/g, '&quot;')})" title="Edit Details"><i class="fa-solid fa-pen"></i></button>
+                <button class="btn-report-action btn-report-delete" onclick="deleteCustomer(${c.id})" title="Delete Passenger"><i class="fa-solid fa-trash"></i></button>
               </div>
             </td>
           </tr>
@@ -269,9 +269,9 @@ window.loadPackages = async () => {
             <td><span class="badge bg-light text-dark border px-2 py-1 rounded-pill">${p.duration}</span></td>
             <td><span class="text-muted fs-8 text-truncate d-inline-block" style="max-width: 220px;">${p.description || 'No description provided.'}</span></td>
             <td class="text-end">
-              <div class="d-flex justify-content-end gap-2">
-                <button class="btn btn-light-primary btn-sm border-0 rounded-circle" onclick="openEditPackageModal(${JSON.stringify(p).replace(/"/g, '&quot;')})" title="Edit"><i class="fa-solid fa-pen"></i></button>
-                <button class="btn btn-light-danger btn-sm border-0 rounded-circle" onclick="deletePackage(${p.id})" title="Delete"><i class="fa-solid fa-trash"></i></button>
+              <div class="d-flex justify-content-end">
+                <button class="btn-report-action btn-report-edit" onclick="openEditPackageModal(${JSON.stringify(p).replace(/"/g, '&quot;')})" title="Edit"><i class="fa-solid fa-pen"></i></button>
+                <button class="btn-report-action btn-report-delete" onclick="deletePackage(${p.id})" title="Delete"><i class="fa-solid fa-trash"></i></button>
               </div>
             </td>
           </tr>
@@ -343,9 +343,9 @@ window.loadBookings = async () => {
             <td><span class="fw-bold text-primary">${formatCurrency(b.total_price)}</span></td>
             <td><span class="${badgeClass}">${b.status}</span></td>
             <td class="text-end">
-              <div class="d-flex justify-content-end gap-1">
-                <a href="/invoice/${b.id}" class="btn btn-light btn-sm border-0 rounded-circle text-primary" title="Print/View invoice"><i class="fa-solid fa-file-invoice"></i></a>
-                <button class="btn btn-light-danger btn-sm border-0 rounded-circle" onclick="deleteBooking(${b.id})" title="Delete Booking"><i class="fa-solid fa-trash"></i></button>
+              <div class="d-flex justify-content-end">
+                <a href="/invoice/${b.id}" class="btn-report-action btn-report-edit" title="Print/View invoice" style="text-decoration:none;"><i class="fa-solid fa-file-invoice"></i></a>
+                <button class="btn-report-action btn-report-delete" onclick="deleteBooking(${b.id})" title="Delete Booking"><i class="fa-solid fa-trash"></i></button>
               </div>
             </td>
           </tr>

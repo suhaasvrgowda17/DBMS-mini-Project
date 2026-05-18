@@ -293,6 +293,108 @@ h1, h2, h3, h4, h5, h6, .font-outfit {
 }
 
 /* =====================================================================
+   Academic Report Table Styles (Matches PDF Screenshots)
+   ===================================================================== */
+.table-report-wrapper {
+  background-color: #ffffff;
+  padding: 24px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  margin-bottom: 2rem;
+}
+
+.table-report-title {
+  font-family: 'Times New Roman', Times, serif;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #000000;
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+}
+
+.table-report {
+  width: 100%;
+  border-collapse: collapse !important;
+  border-top: 2px solid #000000 !important;
+  border-bottom: 2px solid #000000 !important;
+  margin-bottom: 0 !important;
+}
+
+.table-report thead th {
+  background-color: transparent !important;
+  color: #000000 !important;
+  border-bottom: 2px solid #000000 !important;
+  border-top: none !important;
+  font-weight: 700;
+  font-size: 0.85rem;
+  padding: 12px 8px !important;
+  text-transform: capitalize !important;
+  letter-spacing: normal !important;
+}
+
+.table-report tbody td {
+  background-color: transparent !important;
+  color: #333333 !important;
+  border-bottom: 1px solid #f1f5f9 !important;
+  padding: 12px 8px !important;
+  font-size: 0.85rem;
+}
+
+.table-report tbody tr:last-child td {
+  border-bottom: none !important;
+}
+
+.table-caption {
+  text-align: center;
+  font-family: 'Times New Roman', Times, serif;
+  font-weight: bold;
+  color: #000000;
+  margin-top: 12px;
+  font-size: 0.95rem;
+}
+
+/* Report Table Action Buttons (Square shape, solid color) */
+.btn-report-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 3px !important;
+  color: #ffffff !important;
+  border: none;
+  font-size: 12px;
+  margin-right: 4px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transition: transform 0.2s;
+}
+.btn-report-action:hover {
+  transform: translateY(-2px);
+}
+
+.btn-report-edit {
+  background-color: #eab308 !important; /* Yellow */
+}
+.btn-report-delete {
+  background-color: #ef4444 !important; /* Red */
+}
+
+/* Report Table Status Badge */
+.badge-report {
+  background-color: #10b981 !important; /* Green */
+  color: #ffffff !important;
+  padding: 4px 10px;
+  font-size: 0.75rem;
+  border-radius: 4px !important;
+  font-weight: 500;
+  text-transform: lowercase;
+}
+.badge-report-inactive {
+  background-color: #64748b !important; /* Gray */
+}
+
+/* =====================================================================
    Screen-Fitting Responsiveness Overhaul & Layout Fixes
    ===================================================================== */
 
