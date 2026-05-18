@@ -182,10 +182,10 @@ FOR EACH ROW
 
 -- 1. Insert Seed Admins
 INSERT INTO `admins` (`id`, `username`, `email`, `password`, `name`, `role`) VALUES
-(1, 'admin', 'admin@travelagency.com', '$2a$10$nudhtydEd3SB./8LX6.LE.vkKgeCRE8EAa9CdJFf9XOAXMDhx7GOu', 'System Administrator', 'system_administrator'),
-(2, 'pkg_admin', 'packages@travelagency.com', '$2a$10$nudhtydEd3SB./8LX6.LE.vkKgeCRE8EAa9CdJFf9XOAXMDhx7GOu', 'Tour Packages Manager', 'package_manager'),
-(3, 'cust_admin', 'customers@travelagency.com', '$2a$10$nudhtydEd3SB./8LX6.LE.vkKgeCRE8EAa9CdJFf9XOAXMDhx7GOu', 'Client Relations Manager', 'customer_manager'),
-(4, 'pay_admin', 'payments@travelagency.com', '$2a$10$nudhtydEd3SB./8LX6.LE.vkKgeCRE8EAa9CdJFf9XOAXMDhx7GOu', 'Payments Auditor', 'payment_verifier');
+(1, 'admin', 'admin@travelagency.com', '$2a$10$nudhtydEd3SB./8LX6.LE.vkKgeCRE8EAa9CdJFf9XOAXMDhx7GOu', 'V R Suhaas Gowda', 'system_administrator'),
+(2, 'pkg_admin', 'packages@travelagency.com', '$2a$10$nudhtydEd3SB./8LX6.LE.vkKgeCRE8EAa9CdJFf9XOAXMDhx7GOu', 'Vikram Malhotra', 'package_manager'),
+(3, 'cust_admin', 'customers@travelagency.com', '$2a$10$nudhtydEd3SB./8LX6.LE.vkKgeCRE8EAa9CdJFf9XOAXMDhx7GOu', 'Sneha Rao', 'customer_manager'),
+(4, 'pay_admin', 'payments@travelagency.com', '$2a$10$nudhtydEd3SB./8LX6.LE.vkKgeCRE8EAa9CdJFf9XOAXMDhx7GOu', 'Amit Patel', 'payment_verifier');
 
 -- 2. Insert Seed Agents
 INSERT INTO `agents` (`id`, `username`, `email`, `password`, `name`, `phone`, `agency_commission`, `status`) VALUES

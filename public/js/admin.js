@@ -459,16 +459,16 @@ window.loadSystemAdmins = async () => {
       tableBody.innerHTML = '';
       result.data.forEach(a => {
         // Map clean display text for roles
-        let roleBadge = 'badge-report';
-        let roleName = 'Super Administrator';
+        let roleBadge = 'badge-report bg-light-secondary text-secondary border border-secondary';
+        let roleName = 'System Administrator';
         if (a.role === 'package_manager') {
-          roleBadge = 'badge-report bg-light-info text-info';
+          roleBadge = 'badge-report bg-light-info text-info border border-info';
           roleName = 'Tour Packages Manager';
         } else if (a.role === 'customer_manager') {
-          roleBadge = 'badge-report bg-light-warning text-warning';
+          roleBadge = 'badge-report bg-light-warning text-warning border border-warning';
           roleName = 'Client Relations Manager';
         } else if (a.role === 'payment_verifier') {
-          roleBadge = 'badge-report bg-light-success text-success';
+          roleBadge = 'badge-report bg-light-success text-success border border-success';
           roleName = 'Payments Auditor';
         }
 

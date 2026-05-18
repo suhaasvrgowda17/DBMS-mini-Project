@@ -382,16 +382,15 @@ h1, h2, h3, h4, h5, h6, .font-outfit {
 
 /* Report Table Status Badge */
 .badge-report {
-  background-color: #10b981 !important; /* Green */
-  color: #ffffff !important;
+  background-color: #10b981; /* Green */
+  color: #ffffff;
   padding: 4px 10px;
   font-size: 0.75rem;
   border-radius: 4px !important;
   font-weight: 500;
-  text-transform: lowercase;
 }
 .badge-report-inactive {
-  background-color: #64748b !important; /* Gray */
+  background-color: #64748b; /* Gray */
 }
 
 /* =====================================================================
