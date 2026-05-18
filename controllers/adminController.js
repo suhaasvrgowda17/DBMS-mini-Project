@@ -268,13 +268,13 @@ exports.getDiscounts = async (req, res) => {
   }
 };
 
-// --- ADMINS DIRECTORY ---
-exports.getAdmins = async (req, res) => {
+// --- ADMINISTRATORS DIRECTORY ---
+exports.getAdministrators = async (req, res) => {
   try {
-    const [admins] = await db.execute('SELECT id, username, email, name, role FROM admins ORDER BY id ASC');
-    res.json({ success: true, data: admins });
+    const [rows] = await db.execute('SELECT id, username, email, name, role, created_at FROM admins ORDER BY id ASC');
+    res.json({ success: true, data: rows });
   } catch (error) {
-    console.error('Admin Get Admins Error:', error);
+    console.error('Admin Get Administrators Error:', error);
     res.status(500).json({ success: false, message: 'Failed to retrieve administrator records.' });
   }
 };

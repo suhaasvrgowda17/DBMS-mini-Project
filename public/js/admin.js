@@ -40,7 +40,7 @@ window.switchTab = (tabName) => {
   if (tabName === 'bookings') loadBookings();
   if (tabName === 'payments') loadPayments();
   if (tabName === 'discounts') loadDiscounts();
-  if (tabName === 'admins') loadAdmins();
+  if (tabName === 'admins') loadSystemAdmins();
   if (tabName === 'profile') loadAdminProfile();
 };
 
@@ -446,11 +446,11 @@ window.loadDiscounts = async () => {
   }
 };
 
-// --- ADMINS DIRECTORY LOAD ---
-window.loadAdmins = async () => {
+// --- SYSTEM ADMINS LOAD ---
+window.loadSystemAdmins = async () => {
   try {
     const tableBody = document.getElementById('adminsTableBody');
-    tableBody.innerHTML = `<tr><td colspan="5" class="text-center py-4 text-muted"><div class="spinner-border spinner-border-sm text-primary"></div> Loading administrators directory...</td></tr>`;
+    tableBody.innerHTML = `<tr><td colspan="6" class="text-center py-4 text-muted"><div class="spinner-border spinner-border-sm text-primary"></div> Loading administrators directory...</td></tr>`;
 
     const response = await fetch('/api/admin/administrators');
     const result = await response.json();
@@ -458,29 +458,36 @@ window.loadAdmins = async () => {
     if (result.success && result.data.length > 0) {
       tableBody.innerHTML = '';
       result.data.forEach(a => {
-        let badgeClass = 'badge-report';
-        if (a.role === 'system_administrator') badgeClass = 'badge-report text-danger border-danger bg-light-danger';
-        else if (a.role === 'package_manager') badgeClass = 'badge-report text-primary border-primary bg-light-primary';
-        else if (a.role === 'customer_manager') badgeClass = 'badge-report text-success border-success bg-light-success';
-        else if (a.role === 'payment_verifier') badgeClass = 'badge-report text-warning border-warning bg-light-warning';
-
-        const readableRole = a.role.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+        // Map clean display text for roles
+        let roleBadge = 'badge-report';
+        let roleName = 'Super Administrator';
+        if (a.role === 'package_manager') {
+          roleBadge = 'badge-report bg-light-info text-info';
+          roleName = 'Tour Packages Manager';
+        } else if (a.role === 'customer_manager') {
+          roleBadge = 'badge-report bg-light-warning text-warning';
+          roleName = 'Client Relations Manager';
+        } else if (a.role === 'payment_verifier') {
+          roleBadge = 'badge-report bg-light-success text-success';
+          roleName = 'Payments Auditor';
+        }
 
         tableBody.insertAdjacentHTML('beforeend', `
           <tr class="animate__animated animate__fadeInUp animate__faster">
-            <td><code class="fs-7 text-secondary">#${a.id}</code></td>
+            <td><span class="text-muted fw-bold">#${a.id}</span></td>
             <td><span class="fw-bold text-dark">${a.name}</span></td>
-            <td><code class="fs-7 text-dark">${a.username}</code></td>
-            <td><span class="text-muted fs-7">${a.email}</span></td>
-            <td><span class="${badgeClass} text-uppercase fs-8">${readableRole}</span></td>
+            <td><code class="fs-7">${a.username}</code></td>
+            <td><span class="text-secondary">${a.email}</span></td>
+            <td><span class="${roleBadge} fs-8 fw-semibold">${roleName}</span></td>
+            <td><span class="text-muted fs-8">${formatDate(a.created_at)}</span></td>
           </tr>
         `);
       });
     } else {
-      tableBody.innerHTML = `<tr><td colspan="5" class="text-center py-4 text-muted">No administrators registered.</td></tr>`;
+      tableBody.innerHTML = `<tr><td colspan="6" class="text-center py-4 text-muted">No other administrators registered.</td></tr>`;
     }
   } catch (error) {
-    console.error('AJAX Load Admins Error:', error);
+    console.error('AJAX Load System Admins Error:', error);
   }
 };
 
