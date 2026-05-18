@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS `admins` (
   `email` VARCHAR(100) NOT NULL UNIQUE,
   `password` VARCHAR(255) NOT NULL,
   `name` VARCHAR(100) NOT NULL,
-  `role` ENUM('super_admin', 'package_manager', 'customer_manager', 'payment_verifier') DEFAULT 'super_admin',
+  `role` ENUM('system_administrator', 'package_manager', 'customer_manager', 'payment_verifier') DEFAULT 'system_administrator',
   `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -182,7 +182,7 @@ FOR EACH ROW
 
 -- 1. Insert Seed Admins
 INSERT INTO `admins` (`id`, `username`, `email`, `password`, `name`, `role`) VALUES
-(1, 'admin', 'admin@travelagency.com', '$2a$10$nudhtydEd3SB./8LX6.LE.vkKgeCRE8EAa9CdJFf9XOAXMDhx7GOu', 'System Administrator', 'super_admin'),
+(1, 'admin', 'admin@travelagency.com', '$2a$10$nudhtydEd3SB./8LX6.LE.vkKgeCRE8EAa9CdJFf9XOAXMDhx7GOu', 'System Administrator', 'system_administrator'),
 (2, 'pkg_admin', 'packages@travelagency.com', '$2a$10$nudhtydEd3SB./8LX6.LE.vkKgeCRE8EAa9CdJFf9XOAXMDhx7GOu', 'Tour Packages Manager', 'package_manager'),
 (3, 'cust_admin', 'customers@travelagency.com', '$2a$10$nudhtydEd3SB./8LX6.LE.vkKgeCRE8EAa9CdJFf9XOAXMDhx7GOu', 'Client Relations Manager', 'customer_manager'),
 (4, 'pay_admin', 'payments@travelagency.com', '$2a$10$nudhtydEd3SB./8LX6.LE.vkKgeCRE8EAa9CdJFf9XOAXMDhx7GOu', 'Payments Auditor', 'payment_verifier');

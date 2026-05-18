@@ -459,7 +459,7 @@ window.loadAdmins = async () => {
       tableBody.innerHTML = '';
       result.data.forEach(a => {
         let badgeClass = 'badge-report';
-        if (a.role === 'super_admin') badgeClass = 'badge-report text-danger border-danger bg-light-danger';
+        if (a.role === 'system_administrator') badgeClass = 'badge-report text-danger border-danger bg-light-danger';
         else if (a.role === 'package_manager') badgeClass = 'badge-report text-primary border-primary bg-light-primary';
         else if (a.role === 'customer_manager') badgeClass = 'badge-report text-success border-success bg-light-success';
         else if (a.role === 'payment_verifier') badgeClass = 'badge-report text-warning border-warning bg-light-warning';
