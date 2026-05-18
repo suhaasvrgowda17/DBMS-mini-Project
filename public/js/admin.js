@@ -40,6 +40,7 @@ window.switchTab = (tabName) => {
   if (tabName === 'bookings') loadBookings();
   if (tabName === 'payments') loadPayments();
   if (tabName === 'discounts') loadDiscounts();
+  if (tabName === 'admins') loadAdmins();
   if (tabName === 'profile') loadAdminProfile();
 };
 
@@ -442,6 +443,44 @@ window.loadDiscounts = async () => {
     }
   } catch (error) {
     console.error('AJAX Load Discounts Error:', error);
+  }
+};
+
+// --- ADMINS DIRECTORY LOAD ---
+window.loadAdmins = async () => {
+  try {
+    const tableBody = document.getElementById('adminsTableBody');
+    tableBody.innerHTML = `<tr><td colspan="5" class="text-center py-4 text-muted"><div class="spinner-border spinner-border-sm text-primary"></div> Loading administrators directory...</td></tr>`;
+
+    const response = await fetch('/api/admin/administrators');
+    const result = await response.json();
+
+    if (result.success && result.data.length > 0) {
+      tableBody.innerHTML = '';
+      result.data.forEach(a => {
+        let badgeClass = 'badge-report';
+        if (a.role === 'super_admin') badgeClass = 'badge-report text-danger border-danger bg-light-danger';
+        else if (a.role === 'package_manager') badgeClass = 'badge-report text-primary border-primary bg-light-primary';
+        else if (a.role === 'customer_manager') badgeClass = 'badge-report text-success border-success bg-light-success';
+        else if (a.role === 'payment_verifier') badgeClass = 'badge-report text-warning border-warning bg-light-warning';
+
+        const readableRole = a.role.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+
+        tableBody.insertAdjacentHTML('beforeend', `
+          <tr class="animate__animated animate__fadeInUp animate__faster">
+            <td><code class="fs-7 text-secondary">#${a.id}</code></td>
+            <td><span class="fw-bold text-dark">${a.name}</span></td>
+            <td><code class="fs-7 text-dark">${a.username}</code></td>
+            <td><span class="text-muted fs-7">${a.email}</span></td>
+            <td><span class="${badgeClass} text-uppercase fs-8">${readableRole}</span></td>
+          </tr>
+        `);
+      });
+    } else {
+      tableBody.innerHTML = `<tr><td colspan="5" class="text-center py-4 text-muted">No administrators registered.</td></tr>`;
+    }
+  } catch (error) {
+    console.error('AJAX Load Admins Error:', error);
   }
 };
 

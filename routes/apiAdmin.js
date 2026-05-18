@@ -31,4 +31,7 @@ router.get('/payments', adminController.getPayments);
 // Discounts / Promo Codes
 router.get('/discounts', adminController.getDiscounts);
 
+// Admin List
+router.get('/administrators', adminController.getAdmins);
+
 module.exports = router;

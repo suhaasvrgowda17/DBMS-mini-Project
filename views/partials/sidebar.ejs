@@ -64,6 +64,14 @@
         </a>
       </li>
       <% } %>
+
+      <% if (user.admin_level === 'super_admin') { %>
+      <li class="nav-item">
+        <a class="nav-link rounded-3 py-2 px-3 fw-semibold d-flex align-items-center gap-3 text-secondary" id="v-admins-tab" href="#" onclick="switchTab('admins')">
+          <i class="fa-solid fa-users-gear fs-5 text-primary"></i> Administrators
+        </a>
+      </li>
+      <% } %>
     <% } else if (user.role === 'agent') { %>
       <li class="nav-item">
         <a class="nav-link active rounded-3 py-2 px-3 fw-semibold d-flex align-items-center gap-3 text-secondary" id="v-customers-tab" href="#" onclick="switchTab('customers')">
