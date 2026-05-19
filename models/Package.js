@@ -3,7 +3,16 @@ const db = require('../config/db');
 class Package {
   // Get all packages
   static async getAll() {
-    const [rows] = await db.execute('SELECT * FROM tour_packages ORDER BY id DESC');
+    const sql = `
+      SELECT p.*, 
+             (SELECT GROUP_CONCAT(DISTINCT a.name SEPARATOR ', ') 
+              FROM bookings b 
+              JOIN agents a ON b.agent_id = a.id 
+              WHERE b.package_id = p.id) AS assigned_agents
+      FROM tour_packages p
+      ORDER BY p.id DESC
+    `;
+    const [rows] = await db.execute(sql);
     return rows;
   }
 
@@ -60,9 +69,14 @@ class Package {
   // Search packages by name, destination, or description
   static async search(query) {
     const sql = `
-      SELECT * FROM tour_packages
-      WHERE name LIKE ? OR destination LIKE ? OR description LIKE ?
-      ORDER BY id DESC
+      SELECT p.*,
+             (SELECT GROUP_CONCAT(DISTINCT a.name SEPARATOR ', ') 
+              FROM bookings b 
+              JOIN agents a ON b.agent_id = a.id 
+              WHERE b.package_id = p.id) AS assigned_agents
+      FROM tour_packages p
+      WHERE p.name LIKE ? OR p.destination LIKE ? OR p.description LIKE ?
+      ORDER BY p.id DESC
     `;
     const searchVal = `%${query}%`;
     const [rows] = await db.execute(sql, [searchVal, searchVal, searchVal]);

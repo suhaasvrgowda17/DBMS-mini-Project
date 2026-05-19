@@ -25,7 +25,7 @@ class Booking {
              c.passport_number AS customer_passport, c.address AS customer_address,
              b.package_id, p.name AS package_name, p.destination AS package_destination, 
              p.duration AS package_duration, p.price AS package_unit_price,
-             b.agent_id, a.name AS agent_name, a.phone AS agent_phone,
+             b.agent_id, a.name AS agent_name, a.phone AS agent_phone, a.email AS agent_email,
              b.travel_date, b.number_of_travelers, b.total_price, b.status, b.booking_date, b.booking_reference,
              pm.status AS payment_status, pm.transaction_id, pm.payment_method, pm.amount AS payment_amount,
              pc.promo_code AS promo_code, pc.discount_percent AS promo_discount
@@ -45,7 +45,7 @@ class Booking {
   static async getByCustomerId(customerId) {
     const sql = `
       SELECT b.id, b.customer_id, b.package_id, p.name AS package_name, p.destination AS package_destination,
-             b.agent_id, a.name AS agent_name, b.travel_date, b.number_of_travelers, 
+             b.agent_id, a.name AS agent_name, a.phone AS agent_phone, a.email AS agent_email, b.travel_date, b.number_of_travelers, 
              b.total_price, b.status, b.booking_date, b.booking_reference, pm.status AS payment_status, pm.transaction_id,
              pc.promo_code AS promo_code, pc.discount_percent AS promo_discount
       FROM bookings b

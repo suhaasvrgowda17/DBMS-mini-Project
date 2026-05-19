@@ -252,7 +252,7 @@ window.deleteCustomer = (id) => {
 window.loadPackages = async () => {
   try {
     const tableBody = document.getElementById('packagesTableBody');
-    tableBody.innerHTML = `<tr><td colspan="7" class="text-center py-4 text-muted"><div class="spinner-border spinner-border-sm text-primary"></div> Loading tour catalog...</td></tr>`;
+    tableBody.innerHTML = `<tr><td colspan="8" class="text-center py-4 text-muted"><div class="spinner-border spinner-border-sm text-primary"></div> Loading tour catalog...</td></tr>`;
 
     const response = await fetch('/api/packages');
     const result = await response.json();
@@ -270,6 +270,17 @@ window.loadPackages = async () => {
             <td><span class="fw-bold text-dark">${formatCurrency(p.price)}</span></td>
             <td><span class="badge bg-light text-dark border px-2 py-1 rounded-pill">${p.duration}</span></td>
             <td><span class="text-muted fs-8 text-truncate d-inline-block" style="max-width: 220px;">${p.description || 'No description provided.'}</span></td>
+            <td>
+              ${p.assigned_agents ? `
+                <div class="d-flex flex-wrap gap-1">
+                  ${p.assigned_agents.split(', ').map(agent => `
+                    <span class="badge bg-light-primary text-primary px-2 py-1 rounded-pill border border-primary-subtle fs-8 fw-semibold">
+                      <i class="fa-solid fa-user-tie me-1"></i>${agent}
+                    </span>
+                  `).join('')}
+                </div>
+              ` : '<span class="text-muted fs-8 italic">No agents assigned</span>'}
+            </td>
             <td class="text-end">
               <div class="d-flex justify-content-end">
                 <button class="btn-report-action btn-report-edit" onclick="openEditPackageModal(${JSON.stringify(p).replace(/"/g, '&quot;')})" title="Edit"><i class="fa-solid fa-pen"></i></button>
@@ -280,7 +291,7 @@ window.loadPackages = async () => {
         `);
       });
     } else {
-      tableBody.innerHTML = `<tr><td colspan="7" class="text-center py-4 text-muted">No tour packages recorded.</td></tr>`;
+      tableBody.innerHTML = `<tr><td colspan="8" class="text-center py-4 text-muted">No tour packages recorded.</td></tr>`;
     }
   } catch (error) {
     console.error('AJAX Load Packages Error:', error);
