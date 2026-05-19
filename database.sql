@@ -198,8 +198,8 @@ INSERT INTO `agents` (`id`, `username`, `email`, `password`, `name`, `phone`, `a
 INSERT INTO `customers` (`id`, `username`, `email`, `password`, `name`, `phone`, `address`, `passport_number`, `assigned_agent_id`) VALUES
 (4, 'suhaas321', 'suhaas@gmail.com', '$2a$10$bGzsWGvFFhS.efLkLpL8Ou7HB004w5/8X8ihP2yZV4aaQEo.OUYxq', 'suhaas', '9998887776', '123 Tech Park, Bangalore', 'S99887766', 3),
 (5, 'vani321', 'vani@gmail.com', '$2a$10$bGzsWGvFFhS.efLkLpL8Ou7HB004w5/8X8ihP2yZV4aaQEo.OUYxq', 'vani', '9998887775', '456 MG Road, Bangalore', 'V99887765', 3),
-(6, 'rudravinayak321', 'rudravinayak@gmail.com', '$2a$10$bGzsWGvFFhS.efLkLpL8Ou7HB004w5/8X8ihP2yZV4aaQEo.OUYxq', 'rudravinayak', '9998887774', '789 Palace Grounds, Mysore', 'R99887764', 4),
-(7, 'sinchana321', 'sinchana@gmail.com', '$2a$10$bGzsWGvFFhS.efLkLpL8Ou7HB004w5/8X8ihP2yZV4aaQEo.OUYxq', 'sinchana', '9998887773', '321 Ring Road, Hubli', 'S99887763', 4),
+(6, 'rudravinayak321', 'rudravinayak@gmail.com', '$2a$10$bGzsWGvFFhS.efLkLpL8Ou7HB004w5/8X8ihP2yZV4aaQEo.OUYxq', 'rudravinayak', '9998887774', '789 Palace Grounds, Mysore', 'R99887764', 3),
+(7, 'sinchana321', 'sinchana@gmail.com', '$2a$10$bGzsWGvFFhS.efLkLpL8Ou7HB004w5/8X8ihP2yZV4aaQEo.OUYxq', 'sinchana', '9998887773', '321 Ring Road, Hubli', 'S99887763', 3),
 (8, 'sahana321', 'sahana@gmail.com', '$2a$10$bGzsWGvFFhS.efLkLpL8Ou7HB004w5/8X8ihP2yZV4aaQEo.OUYxq', 'sahana', '9998887772', '654 Central Ave, Mangalore', 'S99887762', 1);
 
 -- 3.5 Insert Seed Discounts
