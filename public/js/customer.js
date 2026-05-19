@@ -75,7 +75,7 @@ window.loadCustomerPackages = async (query = '') => {
           <div class="col-md-6 col-lg-4 animate__animated animate__fadeInUp animate__faster">
             <div class="card card-package h-100 border-0 shadow-sm overflow-hidden position-relative">
               <div class="package-img-wrapper" style="height: 180px; overflow: hidden; position: relative;">
-                <img src="${pack.image_url}" class="card-img-top h-100 w-100 object-fit-cover transition-all" alt="${pack.name}">
+                <img src="${pack.image_url}" class="card-img-top h-100 w-100 object-fit-cover transition-all" alt="${pack.name}" loading="lazy">
                 <span class="badge bg-primary position-absolute top-3 end-3 px-3 py-2 fs-7 fw-semibold shadow-sm">${pack.duration}</span>
               </div>
               <div class="card-body p-4 d-flex flex-column">

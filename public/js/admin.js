@@ -263,7 +263,7 @@ window.loadPackages = async () => {
         tableBody.insertAdjacentHTML('beforeend', `
           <tr class="animate__animated animate__fadeInUp animate__faster">
             <td>
-              <img src="${p.image_url}" class="rounded-3 object-fit-cover shadow-sm" style="width: 50px; height: 35px;" alt="destination">
+              <img src="${p.image_url}" class="rounded-3 object-fit-cover shadow-sm" style="width: 50px; height: 35px;" alt="destination" loading="lazy">
             </td>
             <td><span class="fw-bold text-dark">${p.name}</span></td>
             <td><span class="text-primary fw-semibold"><i class="fa-solid fa-location-dot me-1"></i> ${p.destination}</span></td>
