@@ -257,3 +257,40 @@ exports.deleteBookingByAgent = async (req, res) => {
     res.status(500).json({ success: false, message: 'Failed to delete booking.' });
   }
 };
+
+// Agent responds to booking assignment request (accept / reject)
+exports.respondToAssignment = async (req, res) => {
+  try {
+    const agentId = req.session.user.id;
+    const { id } = req.params;
+    const { action } = req.body; // 'accept' or 'reject'
+
+    if (!['accept', 'reject'].includes(action)) {
+      return res.status(400).json({ success: false, message: "Invalid action. Must be 'accept' or 'reject'." });
+    }
+
+    // Verify booking is assigned to this agent
+    const booking = await Booking.getById(id);
+    if (!booking || booking.agent_id !== agentId) {
+      return res.status(403).json({ success: false, message: 'Access Denied. You do not manage this booking.' });
+    }
+
+    if (action === 'accept') {
+      await db.execute(
+        "UPDATE bookings SET agent_assignment_status = 'accepted' WHERE id = ?",
+        [id]
+      );
+      res.json({ success: true, message: 'Assignment request accepted successfully!' });
+    } else {
+      // Rejection: reset agent_id and set status to 'rejected'
+      await db.execute(
+        "UPDATE bookings SET agent_id = NULL, agent_assignment_status = 'rejected' WHERE id = ?",
+        [id]
+      );
+      res.json({ success: true, message: 'Assignment request rejected. The admin has been notified.' });
+    }
+  } catch (error) {
+    console.error('Agent Respond Assignment Error:', error);
+    res.status(500).json({ success: false, message: 'Failed to respond to assignment request.' });
+  }
+};

@@ -103,9 +103,8 @@ exports.bookPackage = async (req, res) => {
       }
     }
 
-    // Get current customer profile to retrieve their assigned agent
-    const customer = await Customer.getById(customerId);
-    const agentId = customer ? customer.assigned_agent_id : null;
+    // Customer self-booking always starts as unassigned and must be assigned an agent by the booking manager
+    const agentId = null;
 
     await connection.beginTransaction();
 

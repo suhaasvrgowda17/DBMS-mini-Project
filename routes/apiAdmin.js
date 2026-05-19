@@ -23,6 +23,7 @@ router.delete('/customers/:id', adminController.deleteCustomer);
 
 // Bookings Ledger Management
 router.get('/bookings', adminController.getBookings);
+router.put('/bookings/:id/assign-agent', adminController.assignAgentToBooking);
 router.delete('/bookings/:id', adminController.deleteBookingByAdmin);
 
 // Payments Ledger Audit Logs

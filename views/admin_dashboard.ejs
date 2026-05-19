@@ -716,6 +716,35 @@
   </div>
 </div>
 
+<!-- 6. Assign Agent to Booking Modal -->
+<div class="modal fade" id="assignAgentModal" tabindex="-1" aria-labelledby="assignAgentModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content card-glass border-0 p-3 shadow-lg">
+      <div class="modal-header border-bottom-0 pb-0">
+        <h5 class="modal-title fw-bold text-dark font-outfit" id="assignAgentModalLabel"><i class="fa-solid fa-user-tie text-primary me-2"></i> Assign Booking Agent</h5>
+        <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="assignAgentForm">
+          <input type="hidden" name="booking_id" id="assignAgentBookingId">
+          <div class="mb-3">
+            <label class="form-label fw-semibold text-dark fs-8 mb-1">Select Travel Agent *</label>
+            <select name="agent_id" id="assignAgentSelect" class="form-select rounded-pill fs-7 py-2" required>
+              <option value="">-- Choose Agent --</option>
+              <% if (typeof agentsList !== 'undefined' && agentsList.length > 0) { %>
+                <% agentsList.forEach(agent => { %>
+                  <option value="<%= agent.id %>"><%= agent.name %> (Commission: <%= agent.agency_commission %>%)</option>
+                <% }) %>
+              <% } %>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primary rounded-pill w-100 py-2 fw-semibold fs-7 shadow-sm">Send Assignment Request</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- Dynamic Administrative Workspace Script -->
 <script src="/js/admin.js"></script>
 

@@ -6,7 +6,8 @@ class Booking {
     const sql = `
       SELECT b.id, b.customer_id, c.name AS customer_name, b.package_id, p.name AS package_name, 
              b.agent_id, a.name AS agent_name, b.travel_date, b.number_of_travelers, 
-             b.total_price, b.status, b.booking_date, b.booking_reference, pm.status AS payment_status
+             b.total_price, b.status, b.booking_date, b.booking_reference, pm.status AS payment_status,
+             b.agent_assignment_status
       FROM bookings b
       JOIN customers c ON b.customer_id = c.id
       JOIN tour_packages p ON b.package_id = p.id
@@ -28,6 +29,7 @@ class Booking {
              b.agent_id, a.name AS agent_name, a.phone AS agent_phone, a.email AS agent_email,
              b.travel_date, b.number_of_travelers, b.total_price, b.status, b.booking_date, b.booking_reference,
              pm.status AS payment_status, pm.transaction_id, pm.payment_method, pm.amount AS payment_amount,
+             b.agent_assignment_status,
              pc.promo_code AS promo_code, pc.discount_percent AS promo_discount
       FROM bookings b
       JOIN customers c ON b.customer_id = c.id
@@ -47,7 +49,7 @@ class Booking {
       SELECT b.id, b.customer_id, b.package_id, p.name AS package_name, p.destination AS package_destination,
              b.agent_id, a.name AS agent_name, a.phone AS agent_phone, a.email AS agent_email, b.travel_date, b.number_of_travelers, 
              b.total_price, b.status, b.booking_date, b.booking_reference, pm.status AS payment_status, pm.transaction_id,
-             pc.promo_code AS promo_code, pc.discount_percent AS promo_discount
+             b.agent_assignment_status, pc.promo_code AS promo_code, pc.discount_percent AS promo_discount
       FROM bookings b
       JOIN tour_packages p ON b.package_id = p.id
       LEFT JOIN agents a ON b.agent_id = a.id
@@ -65,7 +67,7 @@ class Booking {
     const sql = `
       SELECT b.id, b.customer_id, c.name AS customer_name, b.package_id, p.name AS package_name, 
              b.travel_date, b.number_of_travelers, b.total_price, b.status, b.booking_date, b.booking_reference,
-             pm.status AS payment_status
+             pm.status AS payment_status, b.agent_assignment_status
       FROM bookings b
       JOIN customers c ON b.customer_id = c.id
       JOIN tour_packages p ON b.package_id = p.id
@@ -81,8 +83,8 @@ class Booking {
   static async create(customerId, packageId, agentId, travelDate, numberOfTravelers, totalPrice, appliedPromoCode = null, connection = null) {
     const bookingReference = `TM-${Date.now().toString().slice(-4)}${Math.floor(1000 + Math.random() * 9000)}`;
     const sql = `
-      INSERT INTO bookings (customer_id, package_id, agent_id, travel_date, number_of_travelers, total_price, booking_reference, applied_promo_code, status)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'pending')
+      INSERT INTO bookings (customer_id, package_id, agent_id, travel_date, number_of_travelers, total_price, booking_reference, applied_promo_code, status, agent_assignment_status)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'pending', 'unassigned')
     `;
     const params = [
       customerId,

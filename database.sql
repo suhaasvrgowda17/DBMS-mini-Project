@@ -101,6 +101,7 @@ CREATE TABLE IF NOT EXISTS `bookings` (
   `number_of_travelers` INT DEFAULT 1,
   `total_price` DECIMAL(10,2) NOT NULL,
   `status` ENUM('pending', 'confirmed', 'cancelled') DEFAULT 'pending',
+  `agent_assignment_status` ENUM('unassigned', 'assigned_pending', 'accepted', 'rejected') DEFAULT 'unassigned',
   `cancellation_reason` TEXT DEFAULT NULL,
   `applied_promo_code` VARCHAR(50) DEFAULT NULL,
   `booking_date` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

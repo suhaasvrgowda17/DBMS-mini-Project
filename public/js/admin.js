@@ -334,23 +334,71 @@ window.loadBookings = async () => {
     const tableBody = document.getElementById('bookingsTableBody');
     tableBody.innerHTML = `<tr><td colspan="9" class="text-center py-4 text-muted"><div class="spinner-border spinner-border-sm text-primary"></div> Loading booking ledger...</td></tr>`;
 
-    // Re-use statistics load which compiles full booking lists
-    const response = await fetch('/api/admin/stats');
+    // Fetch the full list of bookings from the administrative endpoint
+    const response = await fetch('/api/admin/bookings');
     const result = await response.json();
 
-    if (result.success && result.recentBookings.length > 0) {
-      const bookings = result.recentBookings; 
+    if (result.success && result.data.length > 0) {
+      const bookings = result.data; 
       tableBody.innerHTML = '';
       bookings.forEach(b => {
         const badgeClass = `badge-status badge-${b.status}`;
-        const agentName = b.agent_name ? `<span class="fs-8 text-secondary"><i class="fa-solid fa-user-tie me-1"></i> ${b.agent_name}</span>` : '<span class="text-muted fs-8 italic">Direct Online</span>';
+        
+        let agentDisplay = '';
+        if (b.agent_id) {
+          if (b.agent_assignment_status === 'assigned_pending') {
+            agentDisplay = `
+              <div class="d-flex flex-column gap-1">
+                <span class="fs-8 fw-bold text-dark"><i class="fa-solid fa-user-tie text-warning me-1"></i> ${b.agent_name}</span>
+                <span class="badge bg-light-warning text-warning border border-warning-subtle fs-9 px-2 py-0.5 rounded-pill w-fit-content">
+                  Pending Accept
+                </span>
+              </div>
+            `;
+          } else if (b.agent_assignment_status === 'accepted') {
+            agentDisplay = `
+              <div class="d-flex flex-column gap-1">
+                <span class="fs-8 fw-bold text-dark"><i class="fa-solid fa-user-tie text-success me-1"></i> ${b.agent_name}</span>
+                <span class="badge bg-light-success text-success border border-success-subtle fs-9 px-2 py-0.5 rounded-pill w-fit-content">
+                  Accepted
+                </span>
+              </div>
+            `;
+          } else if (b.agent_assignment_status === 'rejected') {
+            agentDisplay = `
+              <div class="d-flex flex-column gap-1">
+                <span class="fs-8 fw-bold text-danger"><i class="fa-solid fa-user-tie text-danger me-1"></i> ${b.agent_name}</span>
+                <span class="badge bg-light-danger text-danger border border-danger-subtle fs-9 px-2 py-0.5 rounded-pill w-fit-content">
+                  Rejected
+                </span>
+                <button class="btn btn-sm btn-outline-primary fs-9 px-2 py-0.5 mt-1 rounded-pill" onclick="openAssignAgentModal(${b.id})">
+                  Re-assign
+                </button>
+              </div>
+            `;
+          } else {
+            agentDisplay = `<span class="fs-8 text-secondary"><i class="fa-solid fa-user-tie me-1"></i> ${b.agent_name}</span>`;
+          }
+        } else {
+          const statusText = b.agent_assignment_status === 'rejected' ? 'Rejected' : 'Unassigned';
+          agentDisplay = `
+            <div class="d-flex flex-column gap-1">
+              <span class="badge bg-light-danger text-danger border border-danger-subtle fs-9 px-2 py-0.5 rounded-pill w-fit-content mb-1">
+                ${statusText}
+              </span>
+              <button class="btn btn-sm btn-primary fs-9 px-2 py-1 rounded-pill shadow-sm" onclick="openAssignAgentModal(${b.id})">
+                <i class="fa-solid fa-user-plus me-1"></i> Assign Agent
+              </button>
+            </div>
+          `;
+        }
         
         tableBody.insertAdjacentHTML('beforeend', `
           <tr class="animate__animated animate__fadeInUp animate__faster">
             <td><code>${b.booking_reference || '#BKG-' + b.id}</code></td>
             <td><span class="fw-bold text-dark">${b.customer_name}</span></td>
             <td><span class="text-secondary fs-7 fw-semibold">${b.package_name}</span></td>
-            <td>${agentName}</td>
+            <td>${agentDisplay}</td>
             <td><span class="text-dark fs-7">${formatDate(b.travel_date)}</span></td>
             <td><span class="badge bg-light text-dark border px-2 rounded-circle">${b.number_of_travelers}</span></td>
             <td><span class="fw-bold text-primary">${formatCurrency(b.total_price)}</span></td>
@@ -761,3 +809,45 @@ function setupFormHandlers() {
     });
   }
 }
+
+// Open Assign Agent Modal
+window.openAssignAgentModal = (bookingId) => {
+  document.getElementById('assignAgentBookingId').value = bookingId;
+  document.getElementById('assignAgentSelect').value = '';
+  
+  const modal = new bootstrap.Modal(document.getElementById('assignAgentModal'));
+  modal.show();
+};
+
+// Handle Assign Agent Form Submission
+document.getElementById('assignAgentForm')?.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const bookingId = document.getElementById('assignAgentBookingId').value;
+  const agentId = document.getElementById('assignAgentSelect').value;
+
+  try {
+    const response = await fetch(`/api/admin/bookings/${bookingId}/assign-agent`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ agent_id: agentId })
+    });
+    const result = await response.json();
+
+    if (result.success) {
+      showNotification(result.message);
+      
+      // Close modal
+      const modalElement = document.getElementById('assignAgentModal');
+      const modalInstance = bootstrap.Modal.getInstance(modalElement);
+      modalInstance.hide();
+      
+      // Reload bookings list
+      loadBookings();
+    } else {
+      showNotification(result.message, 'error');
+    }
+  } catch (error) {
+    console.error('Assign Agent Submit Error:', error);
+    showNotification('Failed to assign agent.', 'error');
+  }
+});

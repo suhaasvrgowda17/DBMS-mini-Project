@@ -278,3 +278,29 @@ exports.getAdministrators = async (req, res) => {
     res.status(500).json({ success: false, message: 'Failed to retrieve administrator records.' });
   }
 };
+
+// Assign agent to a booking (triggers agent request flow)
+exports.assignAgentToBooking = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { agent_id } = req.body;
+
+    if (!agent_id) {
+      return res.status(400).json({ success: false, message: 'Please select an active travel agent.' });
+    }
+
+    const [result] = await db.execute(
+      "UPDATE bookings SET agent_id = ?, agent_assignment_status = 'assigned_pending' WHERE id = ?",
+      [agent_id, id]
+    );
+
+    if (result.affectedRows > 0) {
+      res.json({ success: true, message: 'Agent assignment request sent. Awaiting agent response.' });
+    } else {
+      res.status(404).json({ success: false, message: 'Booking not found.' });
+    }
+  } catch (error) {
+    console.error('Admin Assign Agent Error:', error);
+    res.status(500).json({ success: false, message: 'Failed to assign agent to booking.' });
+  }
+};

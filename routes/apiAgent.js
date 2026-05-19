@@ -16,6 +16,7 @@ router.delete('/customers/:id', agentController.deleteCustomerByAgent);
 router.get('/bookings', agentController.getAgentBookings);
 router.post('/bookings', agentController.createBookingByAgent);
 router.put('/bookings/:id/status', agentController.updateBookingStatusByAgent);
+router.put('/bookings/:id/respond-assignment', agentController.respondToAssignment);
 router.delete('/bookings/:id', agentController.deleteBookingByAgent);
 
 module.exports = router;

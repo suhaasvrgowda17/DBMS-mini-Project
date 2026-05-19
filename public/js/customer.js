@@ -250,13 +250,21 @@ window.loadCustomerBookingHistory = async () => {
             <td><span class="text-primary fw-semibold fs-7"><i class="fa-solid fa-location-dot me-1"></i> ${b.package_destination}</span></td>
             <td><span class="text-dark fs-7">${formatDate(b.travel_date)}</span></td>
             <td>
-              ${b.agent_name ? `
+              ${b.agent_assignment_status === 'accepted' && b.agent_name ? `
                 <div class="d-flex flex-column gap-1">
                   <span class="fw-bold text-dark fs-7"><i class="fa-solid fa-user-tie text-primary me-1 fs-8"></i>${b.agent_name}</span>
                   <span class="text-muted fs-8"><i class="fa-solid fa-phone me-1 fs-9"></i>${b.agent_phone || 'N/A'}</span>
                   <span class="text-muted fs-9"><i class="fa-solid fa-envelope me-1 fs-9"></i>${b.agent_email || 'N/A'}</span>
                 </div>
-              ` : '<span class="text-muted fs-8 italic">Direct Booking</span>'}
+              ` : b.agent_assignment_status === 'assigned_pending' ? `
+                <div class="text-warning fs-8 fw-semibold">
+                  <i class="fa-solid fa-clock me-1"></i>Agent assignment pending
+                </div>
+              ` : b.agent_assignment_status === 'rejected' ? `
+                <div class="text-danger fs-8 fw-semibold">
+                  <i class="fa-solid fa-circle-xmark me-1"></i>Agent was rejected, awaiting reassignment
+                </div>
+              ` : '<span class="text-muted fs-8 italic">No agent assigned yet</span>'}
             </td>
             <td><span class="badge bg-light text-dark border px-2 rounded-circle">${b.number_of_travelers}</span></td>
             <td><span class="fw-extrabold text-primary">${formatCurrency(b.total_price)}</span></td>

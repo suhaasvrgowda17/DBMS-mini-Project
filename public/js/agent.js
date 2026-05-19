@@ -123,11 +123,26 @@ window.loadAgentBookings = async () => {
         const paymentBadge = b.payment_status === 'completed' ? 'badge-confirmed' : 'badge-pending';
         
         let actionButtons = '';
-        if (b.status === 'pending') {
+        let statusBadge = `<span class="${badgeClass}">${b.status}</span>`;
+        
+        if (b.agent_assignment_status === 'assigned_pending') {
+          statusBadge = `<span class="badge bg-light-warning text-warning border border-warning-subtle px-2 py-1 rounded-pill fw-semibold">Pending Accept</span>`;
           actionButtons = `
-            <button class="btn btn-light-success btn-sm border-0 rounded-circle" onclick="updateAgentBookingStatus(${b.id}, 'confirmed')" title="Confirm Booking"><i class="fa-solid fa-circle-check"></i></button>
-            <button class="btn btn-light-danger btn-sm border-0 rounded-circle" onclick="updateAgentBookingStatus(${b.id}, 'cancelled')" title="Cancel Booking"><i class="fa-solid fa-circle-xmark"></i></button>
+            <button class="btn btn-success btn-sm px-2 rounded-pill fs-8 fw-semibold shadow-sm" onclick="respondToAssignment(${b.id}, 'accept')" title="Accept Assignment">
+              <i class="fa-solid fa-check me-1"></i> Accept Request
+            </button>
+            <button class="btn btn-danger btn-sm px-2 rounded-pill fs-8 fw-semibold shadow-sm" onclick="respondToAssignment(${b.id}, 'reject')" title="Reject Assignment">
+              <i class="fa-solid fa-xmark me-1"></i> Reject
+            </button>
           `;
+        } else {
+          // Normal booking operations (if accepted or direct agent booked)
+          if (b.status === 'pending') {
+            actionButtons = `
+              <button class="btn btn-light-success btn-sm border-0 rounded-circle" onclick="updateAgentBookingStatus(${b.id}, 'confirmed')" title="Confirm Booking"><i class="fa-solid fa-circle-check"></i></button>
+              <button class="btn btn-light-danger btn-sm border-0 rounded-circle" onclick="updateAgentBookingStatus(${b.id}, 'cancelled')" title="Cancel Booking"><i class="fa-solid fa-circle-xmark"></i></button>
+            `;
+          }
         }
         
         tableBody.insertAdjacentHTML('beforeend', `
@@ -138,10 +153,10 @@ window.loadAgentBookings = async () => {
             <td><span class="text-dark fs-7">${formatDate(b.travel_date)}</span></td>
             <td><span class="badge bg-light text-dark border px-2 rounded-circle">${b.number_of_travelers}</span></td>
             <td><span class="fw-bold text-primary">${formatCurrency(b.total_price)}</span></td>
-            <td><span class="${badgeClass}">${b.status}</span></td>
+            <td>${statusBadge}</td>
             <td><span class="badge-status ${paymentBadge} fs-9 py-1 px-2">${b.payment_status || 'pending'}</span></td>
             <td class="text-end">
-              <div class="d-flex justify-content-end gap-2">
+              <div class="d-flex justify-content-end gap-2 align-items-center">
                 ${actionButtons}
                 <a href="/invoice/${b.id}" class="btn btn-light btn-sm border-0 rounded-circle text-primary" title="Print invoice receipt"><i class="fa-solid fa-file-invoice"></i></a>
               </div>
@@ -396,3 +411,27 @@ function setupAgentFormHandlers() {
     });
   }
 }
+
+// Agent responds to assignment request
+window.respondToAssignment = async (bookingId, action) => {
+  const confirmationMsg = action === 'accept' ? 'Are you sure you want to ACCEPT this booking assignment?' : 'Are you sure you want to REJECT this booking assignment?';
+  if (!confirm(confirmationMsg)) return;
+
+  try {
+    const response = await fetch(`/api/agent/bookings/${bookingId}/respond-assignment`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action })
+    });
+    const result = await response.json();
+    if (result.success) {
+      showNotification(result.message);
+      loadAgentBookings();
+    } else {
+      showNotification(result.message, 'error');
+    }
+  } catch (error) {
+    console.error('Agent Respond Assignment Error:', error);
+    showNotification('Action failed.', 'error');
+  }
+};

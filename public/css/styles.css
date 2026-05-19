@@ -275,20 +275,107 @@ h1, h2, h3, h4, h5, h6, .font-outfit {
 /* Invoice Styles */
 .invoice-card {
   max-width: 850px;
+  width: 100%;
   background-color: #ffffff;
   border: 1px solid #e2e8f0;
 }
 @media print {
-  body {
-    background-color: #ffffff !important;
-    color: #000000 !important;
+  @page {
+    size: A4 portrait;
+    margin: 10mm;
   }
+
+  html, body {
+    width: auto !important;
+    min-height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    color: #000000 !important;
+    background: #ffffff !important;
+  }
+
   .no-print {
     display: none !important;
   }
+
   .invoice-card {
     border: 0 !important;
     box-shadow: none !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0.5rem !important;
+    page-break-inside: avoid !important;
+  }
+
+  .invoice-card .row,
+  .invoice-card .container,
+  .invoice-card .table-responsive,
+  .invoice-card .table,
+  .invoice-card .table tbody,
+  .invoice-card .table thead,
+  .invoice-card .table tr,
+  .invoice-card .table td,
+  .invoice-card .table th {
+    page-break-inside: avoid !important;
+  }
+
+  .invoice-card .row {
+    margin: 0 !important;
+  }
+
+  .invoice-card .p-3,
+  .invoice-card .p-4,
+  .invoice-card .p-5,
+  .invoice-card .py-3,
+  .invoice-card .py-4,
+  .invoice-card .py-5,
+  .invoice-card .px-3,
+  .invoice-card .px-4,
+  .invoice-card .px-5 {
+    padding: 0.4rem !important;
+  }
+
+  .invoice-card h2,
+  .invoice-card h3,
+  .invoice-card h5,
+  .invoice-card h6,
+  .invoice-card p,
+  .invoice-card span,
+  .invoice-card small,
+  .invoice-card td,
+  .invoice-card th {
+    margin: 0 !important;
+    font-size: 0.82rem !important;
+    line-height: 1.15 !important;
+  }
+
+  .invoice-card .badge-status,
+  .invoice-card .badge-report {
+    padding: 0.25rem 0.5rem !important;
+    font-size: 0.7rem !important;
+  }
+
+  .invoice-card .table {
+    width: 100% !important;
+    table-layout: fixed !important;
+    font-size: 0.78rem !important;
+  }
+
+  .invoice-card .table th,
+  .invoice-card .table td {
+    padding: 6px 6px !important;
+    white-space: normal !important;
+    word-break: break-word !important;
+  }
+
+  .invoice-card .table-responsive {
+    overflow: visible !important;
+  }
+
+  .invoice-card .border-top,
+  .invoice-card .border-bottom {
+    border: none !important;
   }
 }
 
@@ -408,12 +495,18 @@ html, body {
   -webkit-overflow-scrolling: touch;
 }
 
+.table {
+  width: 100% !important;
+  table-layout: fixed !important;
+}
+
 /* Force table cells to wrap nicely instead of clipping */
 .table td, .table th {
   white-space: normal !important; /* Force text to wrap */
   word-wrap: break-word !important;
   word-break: break-word !important; /* Prevent text overlap on small screen widths */
   max-width: 250px;
+  vertical-align: middle !important;
 }
 
 /* Profile cards and grids screen adjustments */
