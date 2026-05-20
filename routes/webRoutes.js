@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { requireAuth } = require('../middleware/authMiddleware');
+const authController = require('../controllers/authController');
 const Booking = require('../models/Booking');
 const Agent = require('../models/Agent');
 
@@ -68,6 +69,9 @@ router.get('/customer/login', (req, res) => {
     user: null 
   });
 });
+
+// Logout Route Alias
+router.get('/logout', authController.logout);
 
 // Admin Dashboard Screen
 router.get('/admin/dashboard', requireAuth('admin'), async (req, res) => {

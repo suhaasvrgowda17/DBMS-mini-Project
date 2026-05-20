@@ -4,8 +4,9 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Load initial view details
-  loadDashboardStats();
+  // Load initial view details and preserve current tab on refresh.
+  const tabFromHash = window.location.hash ? window.location.hash.replace('#', '') : 'stats';
+  switchTab(tabFromHash || 'stats');
   
   // Register forms submission handlers
   setupFormHandlers();
@@ -13,6 +14,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Switch visible panel in the workspace
 window.switchTab = (tabName) => {
+  // Persist selected tab in the URL so refresh stays on the same section.
+  window.location.hash = `#${tabName}`;
+
   // Update sidebar active classes
   const navLinks = document.querySelectorAll('.sidebar-nav .nav-link');
   navLinks.forEach(link => {
@@ -51,12 +55,13 @@ window.loadDashboardStats = async () => {
     const result = await response.json();
 
     if (result.success) {
+      const stats = result.stats || {};
       // 1. Populate Metrics
-      document.getElementById('stat-revenue').innerText = formatCurrency(result.stats.totalRevenue);
-      document.getElementById('stat-bookings').innerText = result.stats.totalBookings;
-      document.getElementById('stat-customers').innerText = result.stats.totalCustomers;
-      document.getElementById('stat-packages').innerText = result.stats.activePackages;
-      document.getElementById('stat-agents').innerText = result.stats.totalAgents;
+      document.getElementById('stat-revenue').innerText = formatCurrency(stats.totalRevenue ?? 0);
+      document.getElementById('stat-bookings').innerText = stats.totalBookings ?? 0;
+      document.getElementById('stat-customers').innerText = stats.totalCustomers ?? 0;
+      document.getElementById('stat-packages').innerText = stats.activePackages ?? 0;
+      document.getElementById('stat-agents').innerText = stats.totalAgents ?? 0;
 
       // 2. Populate Recent Bookings Table
       const bookingsBody = document.getElementById('statsRecentBookings');
