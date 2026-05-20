@@ -156,7 +156,7 @@ exports.logout = (req, res) => {
       return res.status(500).json({ success: false, message: 'Unable to logout at this time.' });
     }
     res.clearCookie('connect.sid'); // Clear express session ID cookie
-    res.redirect('/login');
+    res.redirect('/');
   });
 };
 
