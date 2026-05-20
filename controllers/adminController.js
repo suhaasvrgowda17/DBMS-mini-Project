@@ -24,6 +24,7 @@ exports.getDashboardStats = async (req, res) => {
       stats: {
         totalRevenue: stats.totalRevenue || 0,
         totalBookings: stats.totalBookings || 0,
+        totalCustomers: stats.totalCustomers || 0,
         activePackages: stats.activePackages || 0,
         totalAgents: stats.totalAgents || 0
       },
