@@ -5,7 +5,7 @@ const Customer = require('../models/Customer');
 // Handle user Login (Admin, Agent, Customer)
 exports.login = async (req, res) => {
   try {
-    const { username, password } = req.body;
+    const { username, password, loginType } = req.body;
 
     // Validate request
     if (!username || !password) {
@@ -22,6 +22,34 @@ exports.login = async (req, res) => {
     const isMatch = await User.verifyPassword(password, user.password);
     if (!isMatch) {
       return res.status(401).json({ success: false, message: 'Invalid credentials. Password incorrect.' });
+    }
+
+    // ========== ROLE VALIDATION ==========
+    // If loginType is specified, validate that the user is logging in from the correct portal
+    if (loginType) {
+      // Prevent admin/agent from accessing customer portal
+      if (loginType === 'customer' && (user.role === 'admin' || user.role === 'agent')) {
+        return res.status(403).json({ 
+          success: false, 
+          message: `Access Denied: ${user.role.charAt(0).toUpperCase() + user.role.slice(1)} accounts cannot access the Passenger Portal. Please use the ${user.role === 'admin' ? 'Admin' : 'Agent'} Portal.` 
+        });
+      }
+
+      // Prevent non-admin from accessing admin portal
+      if (loginType === 'admin' && user.role !== 'admin') {
+        return res.status(403).json({ 
+          success: false, 
+          message: 'Access Denied: Only Admin accounts can access the Admin Portal.' 
+        });
+      }
+
+      // Prevent non-agent from accessing agent portal
+      if (loginType === 'agent' && user.role !== 'agent') {
+        return res.status(403).json({ 
+          success: false, 
+          message: 'Access Denied: Only Agent accounts can access the Agent Portal.' 
+        });
+      }
     }
 
     // Retrieve name for display depending on role
@@ -79,6 +107,10 @@ exports.register = async (req, res) => {
     const existingUser = await User.findByUsername(username);
     if (existingUser) {
       await connection.rollback();
+      // Prevent admin/agent accounts from being used for customer registration
+      if (existingUser.role === 'admin' || existingUser.role === 'agent') {
+        return res.status(403).json({ success: false, message: `This username is reserved for ${existingUser.role} access. Please use a different username.` });
+      }
       return res.status(409).json({ success: false, message: 'Username is already taken.' });
     }
 

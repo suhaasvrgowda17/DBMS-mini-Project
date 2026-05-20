@@ -12,7 +12,7 @@ router.get('/', (req, res) => {
   });
 });
 
-// Login / Register Page
+// Generic Login / Register Page (redirects to customer login for backward compatibility)
 router.get('/login', (req, res) => {
   // If already authenticated, redirect immediately to their respective dashboard
   if (req.session && req.session.user) {
@@ -21,8 +21,50 @@ router.get('/login', (req, res) => {
     if (user.role === 'agent') return res.redirect('/agent/dashboard');
     if (user.role === 'customer') return res.redirect('/customer/dashboard');
   }
-  res.render('login', { 
-    title: 'Login & Register | TravelMate',
+  res.redirect('/customer/login');
+});
+
+// Admin Login Page
+router.get('/admin/login', (req, res) => {
+  // If already authenticated, redirect to dashboard
+  if (req.session && req.session.user) {
+    const user = req.session.user;
+    if (user.role === 'admin') return res.redirect('/admin/dashboard');
+    if (user.role === 'agent') return res.redirect('/agent/dashboard');
+    if (user.role === 'customer') return res.redirect('/customer/dashboard');
+  }
+  res.render('admin_login', { 
+    title: 'Admin Login | TravelMate',
+    user: null 
+  });
+});
+
+// Agent Login Page
+router.get('/agent/login', (req, res) => {
+  // If already authenticated, redirect to dashboard
+  if (req.session && req.session.user) {
+    const user = req.session.user;
+    if (user.role === 'admin') return res.redirect('/admin/dashboard');
+    if (user.role === 'agent') return res.redirect('/agent/dashboard');
+    if (user.role === 'customer') return res.redirect('/customer/dashboard');
+  }
+  res.render('agent_login', { 
+    title: 'Agent Login | TravelMate',
+    user: null 
+  });
+});
+
+// Customer Login / Register Page
+router.get('/customer/login', (req, res) => {
+  // If already authenticated, redirect to dashboard
+  if (req.session && req.session.user) {
+    const user = req.session.user;
+    if (user.role === 'admin') return res.redirect('/admin/dashboard');
+    if (user.role === 'agent') return res.redirect('/agent/dashboard');
+    if (user.role === 'customer') return res.redirect('/customer/dashboard');
+  }
+  res.render('customer_login', { 
+    title: 'Customer Login & Register | TravelMate',
     user: null 
   });
 });
