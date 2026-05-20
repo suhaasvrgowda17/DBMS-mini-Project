@@ -128,12 +128,15 @@
 
       <!-- 2. AGENTS TAB PANEL -->
       <div id="agents-panel" class="dashboard-tab-panel d-none animate__animated animate__fadeIn">
-        <div class="d-flex align-items-center justify-content-between mb-4">
+        <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2">
           <div>
             <h3 class="fw-bold text-dark font-outfit mb-1">Travel Agents Directory</h3>
             <p class="text-muted fs-7 mb-0">Configure agent profiles, commissions, and logins.</p>
           </div>
-          <button class="btn btn-primary rounded-pill px-4" data-bs-toggle="modal" data-bs-target="#addAgentModal"><i class="fa-solid fa-user-plus me-2"></i> Register New Agent</button>
+          <div class="d-flex gap-2 flex-wrap">
+            <button type="button" class="btn btn-outline-secondary rounded-pill px-4" onclick="switchTab('stats')"><i class="fa-solid fa-arrow-left me-2"></i> Back to Dashboard</button>
+            <button class="btn btn-primary rounded-pill px-4" data-bs-toggle="modal" data-bs-target="#addAgentModal"><i class="fa-solid fa-user-plus me-2"></i> Register New Agent</button>
+          </div>
         </div>
 
         <div class="table-report-wrapper">
@@ -161,12 +164,15 @@
 
       <!-- 3. CUSTOMERS TAB PANEL -->
       <div id="customers-panel" class="dashboard-tab-panel d-none animate__animated animate__fadeIn">
-        <div class="d-flex align-items-center justify-content-between mb-4">
+        <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2">
           <div>
             <h3 class="fw-bold text-dark font-outfit mb-1">Passengers Directory</h3>
             <p class="text-muted fs-7 mb-0">System passenger profiles and active assignments.</p>
           </div>
-          <button class="btn btn-primary rounded-pill px-4" data-bs-toggle="modal" data-bs-target="#addCustomerModal"><i class="fa-solid fa-user-plus me-2"></i> Add Passenger</button>
+          <div class="d-flex gap-2 flex-wrap">
+            <button type="button" class="btn btn-outline-secondary rounded-pill px-4" onclick="switchTab('stats')"><i class="fa-solid fa-arrow-left me-2"></i> Back to Dashboard</button>
+            <button class="btn btn-primary rounded-pill px-4" data-bs-toggle="modal" data-bs-target="#addCustomerModal"><i class="fa-solid fa-user-plus me-2"></i> Add Passenger</button>
+          </div>
         </div>
 
         <div class="table-report-wrapper">
@@ -197,12 +203,15 @@
 
       <!-- 4. TOUR PACKAGES TAB PANEL -->
       <div id="packages-panel" class="dashboard-tab-panel d-none animate__animated animate__fadeIn">
-        <div class="d-flex align-items-center justify-content-between mb-4">
+        <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2">
           <div>
             <h3 class="fw-bold text-dark font-outfit mb-1">Tour Packages Catalog</h3>
             <p class="text-muted fs-7 mb-0">Create, edit, and filter promotional holiday packages.</p>
           </div>
-          <button class="btn btn-primary rounded-pill px-4" data-bs-toggle="modal" data-bs-target="#addPackageModal"><i class="fa-solid fa-square-plus me-2"></i> Create Package</button>
+          <div class="d-flex gap-2 flex-wrap">
+            <button type="button" class="btn btn-outline-secondary rounded-pill px-4" onclick="switchTab('stats')"><i class="fa-solid fa-arrow-left me-2"></i> Back to Dashboard</button>
+            <button class="btn btn-primary rounded-pill px-4" data-bs-toggle="modal" data-bs-target="#addPackageModal"><i class="fa-solid fa-square-plus me-2"></i> Create Package</button>
+          </div>
         </div>
 
         <div class="table-report-wrapper">
@@ -231,11 +240,12 @@
 
       <!-- 5. MASTER BOOKINGS TAB PANEL -->
       <div id="bookings-panel" class="dashboard-tab-panel d-none animate__animated animate__fadeIn">
-        <div class="d-flex align-items-center justify-content-between mb-4">
+        <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2">
           <div>
             <h3 class="fw-bold text-dark font-outfit mb-1">Master Bookings Registry</h3>
             <p class="text-muted fs-7 mb-0">Unified dashboard for booking statuses across agents and customers.</p>
           </div>
+          <button type="button" class="btn btn-outline-secondary rounded-pill px-4" onclick="switchTab('stats')"><i class="fa-solid fa-arrow-left me-2"></i> Back to Dashboard</button>
         </div>
 
         <div class="table-report-wrapper">
@@ -265,11 +275,12 @@
 
       <!-- 6. PAYMENTS RECORDS TAB PANEL -->
       <div id="payments-panel" class="dashboard-tab-panel d-none animate__animated animate__fadeIn">
-        <div class="d-flex align-items-center justify-content-between mb-4">
+        <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2">
           <div>
             <h3 class="fw-bold text-dark font-outfit mb-1">Payments Audit Logs</h3>
             <p class="text-muted fs-7 mb-0">Record of transactions and invoice print registers.</p>
           </div>
+          <button type="button" class="btn btn-outline-secondary rounded-pill px-4" onclick="switchTab('stats')"><i class="fa-solid fa-arrow-left me-2"></i> Back to Dashboard</button>
         </div>
 
         <div class="table-report-wrapper">
@@ -298,11 +309,12 @@
 
       <!-- 7. DISCOUNTS TAB PANEL -->
       <div id="discounts-panel" class="dashboard-tab-panel d-none animate__animated animate__fadeIn">
-        <div class="d-flex align-items-center justify-content-between mb-4">
+        <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2">
           <div>
             <h3 class="fw-bold text-dark font-outfit mb-1">Discounts & Promo Codes</h3>
             <p class="text-muted fs-7 mb-0">View all active and inactive discount coupons.</p>
           </div>
+          <button type="button" class="btn btn-outline-secondary rounded-pill px-4" onclick="switchTab('stats')"><i class="fa-solid fa-arrow-left me-2"></i> Back to Dashboard</button>
         </div>
 
         <div class="table-report-wrapper">
@@ -328,11 +340,12 @@
 
       <!-- 7.5. SYSTEM ADMINISTRATORS TAB PANEL -->
       <div id="admins-panel" class="dashboard-tab-panel d-none animate__animated animate__fadeIn">
-        <div class="d-flex align-items-center justify-content-between mb-4">
+        <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2">
           <div>
             <h3 class="fw-bold text-dark font-outfit mb-1">System Administrators Directory</h3>
             <p class="text-muted fs-7 mb-0">View all registered administrative accounts and active sub-roles.</p>
           </div>
+          <button type="button" class="btn btn-outline-secondary rounded-pill px-4" onclick="switchTab('stats')"><i class="fa-solid fa-arrow-left me-2"></i> Back to Dashboard</button>
         </div>
 
         <div class="table-report-wrapper">
@@ -359,9 +372,12 @@
 
       <!-- 8. MY PROFILE MANAGEMENT TAB PANEL -->
       <div id="profile-panel" class="dashboard-tab-panel d-none animate__animated animate__fadeIn">
-        <div class="mb-4">
-          <h3 class="fw-bold text-dark font-outfit mb-1">Administrator Profile Settings</h3>
-          <p class="text-muted fs-7 mb-0">Manage your administrative credentials, email contacts, and securely reset your root security password.</p>
+        <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2">
+          <div>
+            <h3 class="fw-bold text-dark font-outfit mb-1">Administrator Profile Settings</h3>
+            <p class="text-muted fs-7 mb-0">Manage your administrative credentials, email contacts, and securely reset your root security password.</p>
+          </div>
+          <button type="button" class="btn btn-outline-secondary rounded-pill px-4" onclick="switchTab('stats')"><i class="fa-solid fa-arrow-left me-2"></i> Back to Dashboard</button>
         </div>
 
         <div class="row g-4">
