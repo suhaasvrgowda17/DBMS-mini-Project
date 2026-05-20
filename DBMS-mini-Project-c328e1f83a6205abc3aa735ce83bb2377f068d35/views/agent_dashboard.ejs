@@ -1,0 +1,296 @@
+<%- include('partials/header') %>
+<%- include('partials/navbar') %>
+
+<div class="container-fluid py-4 min-vh-100">
+  <div class="row g-4">
+    <!-- Left Sidebar Column -->
+    <div class="col-lg-3 col-xl-2 d-none d-lg-block">
+      <%- include('partials/sidebar') %>
+    </div>
+
+    <!-- Main Dynamic Workspace Column -->
+    <div class="col-lg-9 col-xl-10">
+      <!-- 1. ASSIGNED CLIENTS TAB PANEL -->
+      <div id="customers-panel" class="dashboard-tab-panel animate__animated animate__fadeIn">
+        <div class="d-flex align-items-center justify-content-between mb-4">
+          <div>
+            <h3 class="fw-bold text-dark font-outfit mb-1">My Assigned Customers</h3>
+            <p class="text-muted fs-7 mb-0">Browse and manage passenger accounts under your care.</p>
+          </div>
+          <button class="btn btn-primary rounded-pill px-4" data-bs-toggle="modal" data-bs-target="#agentAddCustomerModal"><i class="fa-solid fa-user-plus me-2"></i> Register New Customer</button>
+        </div>
+
+        <div class="card card-glass border-0 p-4 shadow-sm">
+          <div class="table-responsive">
+            <table class="table align-middle">
+              <thead>
+                <tr>
+                  <th>Passenger Name</th>
+                  <th>Username</th>
+                  <th>Email</th>
+                  <th>Phone Number</th>
+                  <th>Passport</th>
+                  <th>Date Joined</th>
+                  <th class="text-end">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="agentCustomersTableBody">
+                <!-- Loaded via AJAX -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. MANAGE BOOKINGS TAB PANEL -->
+      <div id="bookings-panel" class="dashboard-tab-panel d-none animate__animated animate__fadeIn">
+        <div class="d-flex align-items-center justify-content-between mb-4">
+          <div>
+            <h3 class="fw-bold text-dark font-outfit mb-1">Manage Client Bookings</h3>
+            <p class="text-muted fs-7 mb-0">Record, confirm, or cancel travel packages booked for your assigned passengers.</p>
+          </div>
+          <button class="btn btn-primary rounded-pill px-4" onclick="openCreateBookingModal()"><i class="fa-solid fa-plane me-2"></i> Create Customer Booking</button>
+        </div>
+
+        <div class="card card-glass border-0 p-4 shadow-sm">
+          <div class="table-responsive">
+            <table class="table align-middle">
+              <thead>
+                <tr>
+                  <th>Booking ID</th>
+                  <th>Passenger</th>
+                  <th>Tour Package</th>
+                  <th>Travel Date</th>
+                  <th>Pax Count</th>
+                  <th>Total Cost</th>
+                  <th>Status</th>
+                  <th>Payment Status</th>
+                  <th class="text-end">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="agentBookingsTableBody">
+                <!-- Loaded via AJAX -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. MY PROFILE MANAGEMENT TAB PANEL -->
+      <div id="profile-panel" class="dashboard-tab-panel d-none animate__animated animate__fadeIn">
+        <div class="mb-4">
+          <h3 class="fw-bold text-dark font-outfit mb-1">Agent Profile Settings</h3>
+          <p class="text-muted fs-7 mb-0">Manage your credentials, update contact information, and securely reset your password.</p>
+        </div>
+
+        <div class="row g-4">
+          <div class="col-xl-8">
+            <div class="card card-glass border-0 p-4 shadow-sm">
+              <form id="profileUpdateForm" class="needs-validation" novalidate>
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                  <h5 class="fw-bold mb-0 font-outfit text-dark"><i class="fa-solid fa-id-card text-primary me-2"></i> Profile Details</h5>
+                  <button type="button" id="editProfileBtn" class="btn btn-light-primary btn-sm rounded-pill px-3 fw-semibold fs-8"><i class="fa-solid fa-pen-to-square me-1"></i> Edit Profile</button>
+                </div>
+                
+                <div class="row g-3 mb-3">
+                  <div class="col-md-6">
+                    <label class="form-label fw-semibold text-dark fs-8 mb-1">Full Agent Name *</label>
+                    <input type="text" name="name" id="profName" class="form-control rounded-pill fs-7 py-2" required disabled>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label fw-semibold text-dark fs-8 mb-1">Email Address *</label>
+                    <input type="email" name="email" id="profEmail" class="form-control rounded-pill fs-7 py-2" required disabled>
+                  </div>
+                </div>
+
+                <div class="row g-3 mb-4">
+                  <div class="col-md-6">
+                    <label class="form-label fw-semibold text-dark fs-8 mb-1">Contact Number *</label>
+                    <input type="text" name="phone" id="profPhone" class="form-control rounded-pill fs-7 py-2" pattern="\d{10}" title="Phone number must contain exactly 10 digits" required disabled>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label fw-semibold text-dark fs-8 mb-1">Agency Commission Rate (%)</label>
+                    <input type="text" id="profCommission" class="form-control rounded-pill fs-7 py-2" readonly disabled>
+                  </div>
+                </div>
+
+                <div id="profileEditActions" class="d-none">
+                  <hr class="my-4">
+
+                  <h5 class="fw-bold mb-3 font-outfit text-dark"><i class="fa-solid fa-lock text-primary me-2"></i> Update Security Credentials</h5>
+                  <p class="text-muted fs-8 mb-3">Leave password fields blank if you do not wish to change your credentials.</p>
+
+                  <div class="row g-3 mb-4">
+                    <div class="col-md-6">
+                      <label class="form-label fw-semibold text-dark fs-8 mb-1">Current Password</label>
+                      <input type="password" name="currentPassword" id="profCurrentPassword" class="form-control rounded-pill fs-7 py-2" placeholder="••••••••" minlength="6">
+                    </div>
+                    <div class="col-md-6">
+                      <label class="form-label fw-semibold text-dark fs-8 mb-1">New Secure Password</label>
+                      <input type="password" name="newPassword" id="profNewPassword" class="form-control rounded-pill fs-7 py-2" placeholder="••••••••" minlength="6">
+                    </div>
+                  </div>
+
+                  <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary rounded-pill px-4 py-2 fw-semibold fs-7 shadow-sm">
+                      <i class="fa-solid fa-floppy-disk me-1"></i> Save Profile Modifications
+                    </button>
+                    <button type="button" id="cancelEditBtn" class="btn btn-light text-dark border rounded-pill px-4 py-2 fw-semibold fs-7 shadow-sm">
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <div class="col-xl-4">
+            <div class="card card-glass border-0 p-4 shadow-sm text-center">
+              <div class="profile-avatar bg-light-primary text-primary mx-auto mb-3 rounded-circle d-flex align-items-center justify-content-center border" style="width: 90px; height: 90px;">
+                <i class="fa-solid fa-circle-user fs-1"></i>
+              </div>
+              <h5 class="fw-bold mb-1 text-dark" id="sideCardName"><%= user.displayName %></h5>
+              <span class="badge bg-primary rounded-pill px-3 py-1 text-capitalize fs-7 mb-3"><%= user.role %></span>
+              <p class="text-muted fs-8 mb-0 border-top pt-3 text-start">
+                <strong class="text-dark">Username:</strong> <code><%= user.username %></code><br>
+                <strong class="text-dark">Role Permission:</strong> Professional Travel Agent<br>
+                <strong class="text-dark">Platform Brand:</strong> TravelMate Premium
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- =====================================================================
+     MODALS FORMS FOR AGENT OPERATIONS
+     ===================================================================== -->
+
+<!-- 1. Agent Add Customer Modal -->
+<div class="modal fade" id="agentAddCustomerModal" tabindex="-1" aria-labelledby="agentAddCustomerModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content card-glass border-0 p-3 shadow-lg">
+      <div class="modal-header border-bottom-0 pb-0">
+        <h5 class="modal-title fw-bold text-dark font-outfit" id="agentAddCustomerModalLabel"><i class="fa-solid fa-user-plus text-primary me-2"></i> Register Customer Under You</h5>
+        <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="agentAddCustomerForm" class="needs-validation" novalidate>
+          <div class="mb-2">
+            <label class="form-label fw-semibold text-dark fs-8 mb-1">Customer Full Name *</label>
+            <input type="text" name="name" class="form-control rounded-pill fs-7 py-2" placeholder="e.g. Alice Smith" required>
+          </div>
+          <div class="row g-2">
+            <div class="col-md-6 mb-2">
+              <label class="form-label fw-semibold text-dark fs-8 mb-1">Username *</label>
+              <input type="text" name="username" class="form-control rounded-pill fs-7 py-2" placeholder="alice_smith" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold text-dark fs-8 mb-1">Email *</label>
+              <input type="email" name="email" class="form-control rounded-pill fs-7 py-2" placeholder="alice@gmail.com" required>
+            </div>
+          </div>
+          <div class="row g-2">
+            <div class="col-md-6">
+              <label class="form-label fw-semibold text-dark fs-8 mb-1">Phone Number *</label>
+              <input type="text" name="phone" class="form-control rounded-pill fs-7 py-2" placeholder="10-digit number" pattern="\d{10}" title="Phone number must contain exactly 10 digits" required>
+            </div>
+            <div class="col-md-6 mb-2">
+              <label class="form-label fw-semibold text-dark fs-8 mb-1">Passport Number</label>
+              <input type="text" name="passport_number" class="form-control rounded-pill fs-7 py-2" placeholder="A12345678">
+            </div>
+          </div>
+          <div class="mb-2">
+            <label class="form-label fw-semibold text-dark fs-8 mb-1">Secure Password *</label>
+            <input type="password" name="password" class="form-control rounded-pill fs-7 py-2" placeholder="Min. 6 characters" minlength="6" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold text-dark fs-8 mb-1">Home Address</label>
+            <input type="text" name="address" class="form-control rounded-pill fs-7 py-2" placeholder="123 Pine St, Seattle, WA">
+          </div>
+          <button type="submit" class="btn btn-primary rounded-pill w-100 py-2 fw-semibold fs-7 shadow-sm">Save & Assign Customer</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 2. Agent Edit Customer Modal -->
+<div class="modal fade" id="agentEditCustomerModal" tabindex="-1" aria-labelledby="agentEditCustomerModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content card-glass border-0 p-3 shadow-lg">
+      <div class="modal-header border-bottom-0 pb-0">
+        <h5 class="modal-title fw-bold text-dark font-outfit" id="agentEditCustomerModalLabel"><i class="fa-solid fa-user-pen text-primary me-2"></i> Edit Customer details</h5>
+        <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="agentEditCustomerForm">
+          <input type="hidden" name="id" id="editCustomerId">
+          <div class="mb-2">
+            <label class="form-label fw-semibold text-dark fs-8 mb-1">Full Passenger Name *</label>
+            <input type="text" name="name" id="editCustomerName" class="form-control rounded-pill fs-7 py-2" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold text-dark fs-8 mb-1">Phone Number *</label>
+            <input type="text" name="phone" id="editCustomerPhone" class="form-control rounded-pill fs-7 py-2" pattern="\d{10}" title="Phone number must contain exactly 10 digits" required>
+          </div>
+          <div class="mb-2">
+            <label class="form-label fw-semibold text-dark fs-8 mb-1">Passport Number</label>
+            <input type="text" name="passport_number" id="editCustomerPassport" class="form-control rounded-pill fs-7 py-2">
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold text-dark fs-8 mb-1">Home Address</label>
+            <input type="text" name="address" id="editCustomerAddress" class="form-control rounded-pill fs-7 py-2">
+          </div>
+          <button type="submit" class="btn btn-primary rounded-pill w-100 py-2 fw-semibold fs-7 shadow-sm">Update Client Profile</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 3. Agent Create Booking Modal -->
+<div class="modal fade" id="agentCreateBookingModal" tabindex="-1" aria-labelledby="agentCreateBookingModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content card-glass border-0 p-3 shadow-lg">
+      <div class="modal-header border-bottom-0 pb-0">
+        <h5 class="modal-title fw-bold text-dark font-outfit" id="agentCreateBookingModalLabel"><i class="fa-solid fa-passport text-primary me-2"></i> Book Package for Client</h5>
+        <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="agentCreateBookingForm" class="needs-validation" novalidate>
+          <div class="mb-2">
+            <label class="form-label fw-semibold text-dark fs-8 mb-1">Select Passenger *</label>
+            <select name="customer_id" id="bookingCustomerDropdown" class="form-select rounded-pill fs-7 py-2" required>
+              <!-- Loaded via JS -->
+            </select>
+          </div>
+          <div class="mb-2">
+            <label class="form-label fw-semibold text-dark fs-8 mb-1">Select Tour Package *</label>
+            <select name="package_id" id="bookingPackageDropdown" class="form-select rounded-pill fs-7 py-2" required>
+              <!-- Loaded via JS -->
+            </select>
+          </div>
+          <div class="row g-2 mb-3">
+            <div class="col-md-6">
+              <label class="form-label fw-semibold text-dark fs-8 mb-1">Travel Date *</label>
+              <input type="date" name="travel_date" class="form-control rounded-pill fs-7 py-2" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold text-dark fs-8 mb-1">Travelers Count *</label>
+              <input type="number" name="number_of_travelers" class="form-control rounded-pill fs-7 py-2" value="1" min="1" required>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary rounded-pill w-100 py-2 fw-semibold fs-7 shadow-sm">Confirm Client Booking</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Core Workspace Client Scripts -->
+<script src="/js/agent.js"></script>
+
+<%- include('partials/footer') %>

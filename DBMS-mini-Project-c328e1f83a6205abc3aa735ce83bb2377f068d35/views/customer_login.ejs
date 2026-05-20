@@ -1,0 +1,246 @@
+<%- include('partials/header') %>
+<%- include('partials/navbar') %>
+
+<main class="container py-5 d-flex align-items-center justify-content-center min-vh-75 animate__animated animate__fadeIn">
+  <div class="card card-glass border-0 shadow-lg overflow-hidden rounded-4 w-100" style="max-width: 1000px;">
+    <div class="row g-0">
+      <!-- Left Info Panel Column (Visual Branding) -->
+      <div class="col-lg-5 d-none d-lg-flex flex-column justify-content-between p-5 text-white position-relative" style="background: linear-gradient(135deg, var(--primary-color), #2d5cf6); min-height: 550px;">
+        <div class="hero-overlay-brand" style="background: url('https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=800&q=80') center center / cover no-repeat; position: absolute; inset: 0; opacity: 0.15; z-index: 1;"></div>
+        
+        <div class="position-relative z-index-2">
+          <a class="d-flex align-items-center gap-2 mb-4 text-white text-decoration-none" href="/">
+            <div class="logo-icon bg-white text-primary d-flex align-items-center justify-content-center rounded-3" style="width: 36px; height: 36px;">
+              <i class="fa-solid fa-plane-departure fs-5"></i>
+            </div>
+            <h4 class="logo-text fw-bold mb-0">Voyage<span class="text-white-50">Flow</span></h4>
+          </a>
+          <h2 class="display-6 fw-bold font-outfit mt-4 leading-sm">Your Next Journey <br>Starts Here.</h2>
+          <p class="text-light-50 mt-3 fs-6">
+            Browse premium travel packages, manage your bookings, and track your reservations in one place.
+          </p>
+        </div>
+
+        <div class="position-relative z-index-2 border-top border-white-10 pt-4">
+          <div class="d-flex align-items-center gap-3">
+            <div class="avatar bg-white-20 rounded-circle d-flex align-items-center justify-content-center" style="width: 45px; height: 45px;">
+              <i class="fa-solid fa-earth-americas"></i>
+            </div>
+            <div>
+              <p class="mb-0 fw-semibold text-white fs-7">Passenger Portal</p>
+              <small class="text-white-50 fs-8">Book and manage your travels</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Form Processing Column -->
+      <div class="col-lg-7 p-4 p-md-5 bg-white d-flex flex-column justify-content-center">
+        <!-- Error Alerts Container -->
+        <div id="authAlert" class="alert d-none animate__animated animate__fadeIn" role="alert"></div>
+
+        <!-- Custom Navigation Tabs for Sign In vs Registration -->
+        <ul class="nav nav-pills nav-fill bg-light rounded-pill p-1 mb-4 border border-light-subtle" id="authTabs" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link active rounded-pill fw-semibold py-2" id="login-tab" data-bs-toggle="pill" data-bs-target="#login-panel" type="button" role="tab" aria-controls="login-panel" aria-selected="true">
+              <i class="fa-solid fa-right-to-bracket me-1"></i> Sign In
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link rounded-pill fw-semibold py-2" id="register-tab" data-bs-toggle="pill" data-bs-target="#register-panel" type="button" role="tab" aria-controls="register-panel" aria-selected="false">
+              <i class="fa-solid fa-user-plus me-1"></i> Join as Passenger
+            </button>
+          </li>
+        </ul>
+
+        <!-- Tab Content -->
+        <div class="tab-content" id="authTabsContent">
+          <!-- 1. SIGN IN FORM -->
+          <div class="tab-pane fade show active" id="login-panel" role="tabpanel" aria-labelledby="login-tab">
+            <div class="mb-4">
+              <h4 class="fw-bold text-dark font-outfit">Welcome Back!</h4>
+              <p class="text-muted fs-7">Enter your credentials to access your account.</p>
+            </div>
+
+            <form id="loginForm" class="needs-validation" novalidate>
+              <div class="mb-3">
+                <label for="loginUsername" class="form-label fw-semibold text-dark fs-7">Username</label>
+                <div class="input-group input-group-pill border rounded-pill overflow-hidden">
+                  <span class="input-group-text bg-light border-0 ps-3 text-muted"><i class="fa-solid fa-user"></i></span>
+                  <input type="text" class="form-control border-0 py-2 shadow-none fs-7" id="loginUsername" name="username" placeholder="e.g. suhaas321" required>
+                </div>
+              </div>
+
+              <div class="mb-4">
+                <label for="loginPassword" class="form-label fw-semibold text-dark fs-7">Password</label>
+                <div class="input-group input-group-pill border rounded-pill overflow-hidden">
+                  <span class="input-group-text bg-light border-0 ps-3 text-muted"><i class="fa-solid fa-lock"></i></span>
+                  <input type="password" class="form-control border-0 py-2 shadow-none fs-7" id="loginPassword" name="password" placeholder="••••••••••••" required>
+                </div>
+              </div>
+
+              <button type="submit" class="btn btn-primary rounded-pill w-100 py-2 fw-semibold fs-6 shadow-sm">
+                <i class="fa-solid fa-right-to-bracket me-1"></i> Sign In to Passenger Account
+              </button>
+            </form>
+
+            <div class="mt-4 pt-3 border-top text-center text-muted fs-8">
+              <p class="mb-0">For testing, use: <code>suhaas321</code> | Password: <code>password123</code></p>
+            </div>
+          </div>
+
+          <!-- 2. CUSTOMER REGISTRATION FORM -->
+          <div class="tab-pane fade" id="register-panel" role="tabpanel" aria-labelledby="register-tab">
+            <div class="mb-3">
+              <h4 class="fw-bold text-dark font-outfit">Create Passenger Account</h4>
+              <p class="text-muted fs-7">Register to browse destinations and place bookings.</p>
+            </div>
+
+            <form id="registerForm" class="needs-validation" novalidate>
+              <div class="row g-2">
+                <div class="col-md-6 mb-2">
+                  <label for="regName" class="form-label fw-semibold text-dark fs-8 mb-1">Full Name *</label>
+                  <input type="text" class="form-control rounded-pill py-2 fs-7 shadow-none border" id="regName" name="name" placeholder="Alice Smith" required>
+                </div>
+                <div class="col-md-6 mb-2">
+                  <label for="regPhone" class="form-label fw-semibold text-dark fs-8 mb-1">Phone Number *</label>
+                  <input type="text" class="form-control rounded-pill py-2 fs-7 shadow-none border" id="regPhone" name="phone" placeholder="10-digit number (e.g. 9876543210)" pattern="\d{10}" title="Phone number must contain exactly 10 digits" required>
+                </div>
+              </div>
+
+              <div class="row g-2">
+                <div class="col-md-6 mb-2">
+                  <label for="regUsername" class="form-label fw-semibold text-dark fs-8 mb-1">Username *</label>
+                  <input type="text" class="form-control rounded-pill py-2 fs-7 shadow-none border" id="regUsername" name="username" placeholder="alice_smith" required>
+                </div>
+                <div class="col-md-6 mb-2">
+                  <label for="regEmail" class="form-label fw-semibold text-dark fs-8 mb-1">Email Address *</label>
+                  <input type="email" class="form-control rounded-pill py-2 fs-7 shadow-none border" id="regEmail" name="email" placeholder="alice@example.com" required>
+                </div>
+              </div>
+
+              <div class="mb-2">
+                <label for="regPassword" class="form-label fw-semibold text-dark fs-8 mb-1">Password *</label>
+                <input type="password" class="form-control rounded-pill py-2 fs-7 shadow-none border" id="regPassword" name="password" placeholder="Min. 6 characters" minlength="6" required>
+              </div>
+
+              <div class="row g-2">
+                <div class="col-md-6 mb-2">
+                  <label for="regPassport" class="form-label fw-semibold text-dark fs-8 mb-1">Passport Number (Optional)</label>
+                  <input type="text" class="form-control rounded-pill py-2 fs-7 shadow-none border" id="regPassport" name="passport_number" placeholder="e.g. A92837493">
+                </div>
+                <div class="col-md-6 mb-2">
+                  <label for="regAddress" class="form-label fw-semibold text-dark fs-8 mb-1">Home Address (Optional)</label>
+                  <input type="text" class="form-control rounded-pill py-2 fs-7 shadow-none border" id="regAddress" name="address" placeholder="123 Pine St, Seattle, WA">
+                </div>
+              </div>
+
+              <button type="submit" class="btn btn-primary rounded-pill w-100 py-2 fw-semibold fs-7 shadow-sm mt-3">
+                <i class="fa-solid fa-user-plus me-1"></i> Register Account
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <div class="text-center mt-4">
+          <p class="text-muted"><a href="/" class="text-decoration-none">← Back to Portal Selection</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script src="/js/customer.js"></script>
+<script>
+  // Handle Customer Login Form Submission
+  document.getElementById('loginForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const username = document.getElementById('loginUsername').value.trim();
+    const password = document.getElementById('loginPassword').value.trim();
+
+    try {
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ username, password, loginType: 'customer' })
+      });
+
+      const data = await response.json();
+      const alertDiv = document.getElementById('authAlert');
+
+      if (data.success) {
+        alertDiv.className = 'alert alert-success animate__animated animate__fadeIn';
+        alertDiv.innerHTML = '<i class="fa-solid fa-check-circle me-2"></i>' + data.message;
+        setTimeout(() => {
+          window.location.href = data.redirectUrl;
+        }, 500);
+      } else {
+        alertDiv.className = 'alert alert-danger animate__animated animate__fadeIn';
+        alertDiv.innerHTML = '<i class="fa-solid fa-exclamation-circle me-2"></i>' + data.message;
+      }
+      alertDiv.classList.remove('d-none');
+    } catch (error) {
+      console.error('Login Error:', error);
+      const alertDiv = document.getElementById('authAlert');
+      alertDiv.className = 'alert alert-danger animate__animated animate__fadeIn';
+      alertDiv.innerHTML = '<i class="fa-solid fa-exclamation-circle me-2"></i>An error occurred during login. Please try again.';
+      alertDiv.classList.remove('d-none');
+    }
+  });
+
+  // Handle Customer Registration Form Submission
+  document.getElementById('registerForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const name = document.getElementById('regName').value.trim();
+    const phone = document.getElementById('regPhone').value.trim();
+    const username = document.getElementById('regUsername').value.trim();
+    const email = document.getElementById('regEmail').value.trim();
+    const password = document.getElementById('regPassword').value.trim();
+    const passport_number = document.getElementById('regPassport').value.trim();
+    const address = document.getElementById('regAddress').value.trim();
+
+    try {
+      const response = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          username,
+          email,
+          password,
+          name,
+          phone,
+          address,
+          passport_number
+        })
+      });
+
+      const data = await response.json();
+      const alertDiv = document.getElementById('authAlert');
+
+      if (data.success) {
+        alertDiv.className = 'alert alert-success animate__animated animate__fadeIn';
+        alertDiv.innerHTML = '<i class="fa-solid fa-check-circle me-2"></i>' + data.message;
+        setTimeout(() => {
+          document.getElementById('registerForm').reset();
+          document.getElementById('login-tab').click();
+        }, 1000);
+      } else {
+        alertDiv.className = 'alert alert-danger animate__animated animate__fadeIn';
+        alertDiv.innerHTML = '<i class="fa-solid fa-exclamation-circle me-2"></i>' + data.message;
+      }
+      alertDiv.classList.remove('d-none');
+    } catch (error) {
+      console.error('Registration Error:', error);
+      const alertDiv = document.getElementById('authAlert');
+      alertDiv.className = 'alert alert-danger animate__animated animate__fadeIn';
+      alertDiv.innerHTML = '<i class="fa-solid fa-exclamation-circle me-2"></i>An error occurred during registration. Please try again.';
+      alertDiv.classList.remove('d-none');
+    }
+  });
+</script>
+
+<%- include('partials/footer') %>

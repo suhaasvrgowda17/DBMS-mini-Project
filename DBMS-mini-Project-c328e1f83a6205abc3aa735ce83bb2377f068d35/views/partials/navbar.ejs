@@ -1,0 +1,70 @@
+<!-- Navigation Bar -->
+<nav class="navbar navbar-expand-lg navbar-glass sticky-top py-3 animate__animated animate__fadeInDown">
+  <div class="container">
+    <!-- Brand Logo -->
+    <a class="navbar-brand d-flex align-items-center gap-2" href="/">
+      <div class="logo-icon bg-primary text-white d-flex align-items-center justify-content-center rounded-3">
+        <i class="fa-solid fa-plane-departure fs-5"></i>
+      </div>
+      <span class="logo-text fw-bold text-dark fs-4">Travel<span class="text-primary">Mate</span></span>
+    </a>
+
+    <!-- Mobile Toggle -->
+    <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Menu Links -->
+    <div class="collapse navbar-collapse" id="mainNavbar">
+      <ul class="navbar-nav ms-auto align-items-lg-center gap-2 gap-lg-3 mt-3 mt-lg-0">
+        <li class="nav-item">
+          <a class="nav-link fw-semibold text-dark-secondary" href="/"><i class="fa-solid fa-house me-1 opacity-75"></i> Home</a>
+        </li>
+        
+        <% if (user) { %>
+          <!-- Dashboard Links according to user role -->
+          <li class="nav-item">
+            <% if (user.role === 'admin') { %>
+              <a class="nav-link fw-semibold text-dark-secondary" href="/admin/dashboard"><i class="fa-solid fa-gauge-high me-1 opacity-75"></i> Admin Panel</a>
+            <% } else if (user.role === 'agent') { %>
+              <a class="nav-link fw-semibold text-dark-secondary" href="/agent/dashboard"><i class="fa-solid fa-briefcase me-1 opacity-75"></i> Agent Desk</a>
+            <% } else { %>
+              <a class="nav-link fw-semibold text-dark-secondary" href="/customer/dashboard"><i class="fa-solid fa-compass me-1 opacity-75"></i> Travel Planner</a>
+            <% } %>
+          </li>
+          
+          <!-- User Profile Session Badge -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle d-flex align-items-center gap-2 bg-light-primary px-3 py-2 rounded-pill border border-primary-subtle text-primary fw-semibold" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fa-solid fa-circle-user fs-5"></i>
+              <span><%= user.displayName %></span>
+              <span class="badge bg-primary text-capitalize rounded-pill px-2 fs-7"><%= user.role %></span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg mt-2 p-2 rounded-3 animate__animated animate__fadeInUp animate__faster">
+              <li>
+                <a class="dropdown-item d-flex align-items-center gap-2 rounded-2 py-2 text-danger" href="/logout">
+                  <i class="fa-solid fa-right-from-bracket"></i> Logout Session
+                </a>
+              </li>
+            </ul>
+          </li>
+        <% } else { %>
+          <!-- Logged Out Navigation Options -->
+          <li class="nav-item">
+            <a class="nav-link fw-semibold text-dark-secondary" href="/#tour-packages"><i class="fa-solid fa-map-location-dot me-1 opacity-75"></i> Packages</a>
+          </li>
+          <li class="nav-item">
+            <a class="btn btn-primary rounded-pill px-4 fw-semibold shadow-sm" href="/login"><i class="fa-solid fa-right-to-bracket me-1"></i> Sign In</a>
+          </li>
+        <% } %>
+
+        <!-- Theme Toggle Switch -->
+        <li class="nav-item border-start ps-lg-3 ms-lg-1 d-none d-lg-block">
+          <button id="themeToggleBtn" class="btn btn-light rounded-circle shadow-sm border p-2 theme-btn d-flex align-items-center justify-content-center" title="Toggle Dark/Light Mode">
+            <i class="fa-solid fa-moon text-dark fs-5"></i>
+          </button>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
