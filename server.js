@@ -21,18 +21,33 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
 // Configure Express Session (Memory Store for local deployments)
+if (process.env.NODE_ENV === 'production') {
+  app.set('trust proxy', 1);
+}
+
 app.use(
   session({
+    name: process.env.SESSION_NAME || 'travelmate.sid',
     secret: process.env.SESSION_SECRET || 'super_secret_travel_agency_session_key',
     resave: false,
     saveUninitialized: false,
     cookie: {
       httpOnly: true,
-      secure: false, // Set to true in production if using HTTPS
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
       maxAge: 24 * 60 * 60 * 1000 // 1 day session lifetime
     }
   })
 );
+
+// Basic security headers
+app.use((req, res, next) => {
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'DENY');
+  res.setHeader('Referrer-Policy', 'no-referrer');
+  res.setHeader('X-XSS-Protection', '1; mode=block');
+  next();
+});
 
 // Expose user session variables to all templates locally
 const { exposeUserSession } = require('./middleware/authMiddleware');
