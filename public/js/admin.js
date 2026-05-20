@@ -54,6 +54,7 @@ window.loadDashboardStats = async () => {
       // 1. Populate Metrics
       document.getElementById('stat-revenue').innerText = formatCurrency(result.stats.totalRevenue);
       document.getElementById('stat-bookings').innerText = result.stats.totalBookings;
+      document.getElementById('stat-customers').innerText = result.stats.totalCustomers;
       document.getElementById('stat-packages').innerText = result.stats.activePackages;
       document.getElementById('stat-agents').innerText = result.stats.totalAgents;
 
@@ -181,6 +182,9 @@ window.loadCustomers = async () => {
 
     const response = await fetch('/api/admin/customers');
     const result = await response.json();
+
+    const customerCount = result.success ? result.data.length : 0;
+    document.getElementById('customerCountText').innerText = customerCount;
 
     if (result.success && result.data.length > 0) {
       tableBody.innerHTML = '';

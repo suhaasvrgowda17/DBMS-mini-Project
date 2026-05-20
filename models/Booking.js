@@ -120,6 +120,7 @@ class Booking {
     const queries = {
       totalRevenue: "SELECT SUM(amount) AS count FROM payments WHERE status = 'completed'",
       totalBookings: "SELECT COUNT(*) AS count FROM bookings",
+      totalCustomers: "SELECT COUNT(*) AS count FROM customers",
       activePackages: "SELECT COUNT(*) AS count FROM tour_packages",
       totalAgents: "SELECT COUNT(*) AS count FROM agents WHERE status = 'active'"
     };

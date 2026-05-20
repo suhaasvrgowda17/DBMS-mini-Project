@@ -22,7 +22,7 @@
 
         <!-- Metric Counter Grid -->
         <div class="row g-4 mb-5">
-          <div class="col-md-6 col-xl-3">
+          <div class="col-sm-6 col-xl-2">
             <div class="card card-glass border-0 p-4 shadow-sm h-100">
               <div class="d-flex justify-content-between align-items-center mb-3">
                 <span class="text-muted fs-7 fw-semibold text-uppercase">Total Billing Revenue</span>
@@ -32,7 +32,7 @@
               <small class="text-success fw-semibold"><i class="fa-solid fa-arrow-trend-up me-1"></i> Live earnings</small>
             </div>
           </div>
-          <div class="col-md-6 col-xl-3">
+          <div class="col-sm-6 col-xl-2">
             <div class="card card-glass border-0 p-4 shadow-sm h-100">
               <div class="d-flex justify-content-between align-items-center mb-3">
                 <span class="text-muted fs-7 fw-semibold text-uppercase">Total Bookings</span>
@@ -42,7 +42,17 @@
               <small class="text-muted fw-semibold">Reservations registered</small>
             </div>
           </div>
-          <div class="col-md-6 col-xl-3">
+          <div class="col-sm-6 col-xl-2">
+            <div class="card card-glass border-0 p-4 shadow-sm h-100">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <span class="text-muted fs-7 fw-semibold text-uppercase">Total Customers</span>
+                <span class="p-2 bg-light-primary text-primary rounded-3"><i class="fa-solid fa-users fs-5"></i></span>
+              </div>
+              <h3 class="fw-extrabold font-outfit text-dark mb-1" id="stat-customers">0</h3>
+              <small class="text-muted fw-semibold">Passengers registered</small>
+            </div>
+          </div>
+          <div class="col-sm-6 col-xl-2">
             <div class="card card-glass border-0 p-4 shadow-sm h-100">
               <div class="d-flex justify-content-between align-items-center mb-3">
                 <span class="text-muted fs-7 fw-semibold text-uppercase">Active Packages</span>
@@ -52,7 +62,7 @@
               <small class="text-muted fw-semibold">Tour programs</small>
             </div>
           </div>
-          <div class="col-md-6 col-xl-3">
+          <div class="col-sm-6 col-xl-2">
             <div class="card card-glass border-0 p-4 shadow-sm h-100">
               <div class="d-flex justify-content-between align-items-center mb-3">
                 <span class="text-muted fs-7 fw-semibold text-uppercase">Active Agents</span>
@@ -160,7 +170,10 @@
         </div>
 
         <div class="table-report-wrapper">
-          <div class="table-report-title">PASSENGERS DIRECTORY</div>
+          <div class="d-flex flex-wrap align-items-center justify-content-between mb-3">
+            <div class="table-report-title mb-2 mb-md-0">PASSENGERS DIRECTORY</div>
+            <div class="text-muted fs-8">Registered passengers: <span id="customerCountText">0</span></div>
+          </div>
           <div class="table-responsive" style="border: none; border-radius: 0;">
             <table class="table-report align-middle">
               <thead>
