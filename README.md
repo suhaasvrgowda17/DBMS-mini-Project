@@ -42,17 +42,19 @@ The database seeds include:
 
 ---
 
-### 2. Configure Environment Parameters
-Open the `.env` file in the root folder (`c:\Users\V R SUHAAS GOWDA\OneDrive\Desktop\sunday\.env`) and adjust the password/credentials to match your local MySQL server setup:
+### 2. Environment Configuration ✅
+The `.env` file has been configured with the following settings:
 
 ```ini
 PORT=3000
 DB_HOST=localhost
 DB_USER=root
-DB_PASSWORD=YOUR_LOCAL_MYSQL_PASSWORD  # <-- Change this to your local password
+DB_PASSWORD=Suhaas!3030
 DB_NAME=TravelAgencyManagementSystem
 SESSION_SECRET=super_secret_travel_agency_session_key_2026_xyz
 ```
+
+**Note**: If you need to modify these settings (e.g., different MySQL password or port), edit the `.env` file in the root directory accordingly.
 
 ---
 
