@@ -23,7 +23,7 @@ app.set('views', path.join(__dirname, 'views'));
 // Configure Express Session (Memory Store for local deployments)
 app.use(
   session({
-    secret: process.env.SESSION_SECRET || 'super_secret_travel_agency_session_key',
+    secret: process.env.SESSION_SECRET || 'your_session_secret_here',
     resave: false,
     saveUninitialized: false,
     cookie: {

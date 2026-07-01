@@ -49,9 +49,9 @@ The `.env` file has been configured with the following settings:
 PORT=3000
 DB_HOST=localhost
 DB_USER=root
-DB_PASSWORD=Suhaas!3030
+DB_PASSWORD=your_database_password
 DB_NAME=TravelAgencyManagementSystem
-SESSION_SECRET=super_secret_travel_agency_session_key_2026_xyz
+SESSION_SECRET=your_session_secret_here
 ```
 
 **Note**: If you need to modify these settings (e.g., different MySQL password or port), edit the `.env` file in the root directory accordingly.
